@@ -1,0 +1,66 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Add Teacher - EduCore CRM{% endblock %}
+
+{% block content %}
+<div class="dashboard-header animate-fade-in stagger-1" style="margin-bottom: 24px;">
+    <h1 style="font-size: 2rem; margin-bottom: 5px;">Add New Teacher</h1>
+    <p style="color: var(--text-muted);">Enter teacher details to create a new faculty profile and user account.</p>
+</div>
+
+<div class="card animate-fade-in stagger-2" style="max-width: 800px;">
+    <form method="post" action="{% url 'teacher_add' %}">
+        {% csrf_token %}
+        
+        {% if form.errors %}
+            <div style="background-color: rgba(239, 68, 68, 0.1); color: #DC2626; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(239, 68, 68, 0.2);">
+                <p style="font-weight: 600; margin-bottom: 5px;">Please correct the following errors:</p>
+                {{ form.errors }}
+            </div>
+        {% endif %}
+
+        <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; color: var(--secondary-color);">Account Information</h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label for="{{ form.first_name.id_for_label }}" class="form-label">First Name *</label>
+                <input type="text" name="{{ form.first_name.html_name }}" id="{{ form.first_name.id_for_label }}" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.last_name.id_for_label }}" class="form-label">Last Name *</label>
+                <input type="text" name="{{ form.last_name.html_name }}" id="{{ form.last_name.id_for_label }}" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.email.id_for_label }}" class="form-label">Email Address *</label>
+                <input type="email" name="{{ form.email.html_name }}" id="{{ form.email.id_for_label }}" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.employee_id.id_for_label }}" class="form-label">Employee ID *</label>
+                <input type="text" name="{{ form.employee_id.html_name }}" id="{{ form.employee_id.id_for_label }}" class="form-control" required>
+            </div>
+        </div>
+
+        <h3 style="margin-bottom: 20px; margin-top: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; color: var(--secondary-color);">Professional Details</h3>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label for="{{ form.department.id_for_label }}" class="form-label">Department</label>
+                <input type="text" name="{{ form.department.html_name }}" id="{{ form.department.id_for_label }}" class="form-control" placeholder="e.g. Science">
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.joining_date.id_for_label }}" class="form-label">Joining Date</label>
+                <input type="date" name="{{ form.joining_date.html_name }}" id="{{ form.joining_date.id_for_label }}" class="form-control">
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 15px; margin-top: 30px; justify-content: flex-end;">
+            <a href="{% url 'teacher_list' %}" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary" style="background-color: var(--secondary-color);"><i class="ph ph-check" style="margin-right: 5px;"></i> Save Teacher</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base/base.html' %}
+{% block title %}Assignments | EduCore CRM{% endblock %}
+{% block page_title %}Assignments{% endblock %}
+
+{% block content %}
+<div class="actions-bar" style="display: flex; justify-content: flex-end; margin-bottom: 24px;">
+    <a href="{% url 'assignment_add' %}" class="btn btn-primary"><i class="ph ph-plus" style="margin-right: 5px;"></i> Create Assignment</a>
+</div>
+
+<div class="dashboard-stats">
+    {% for assignment in assignments %}
+        <div class="card" style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <h3 style="margin: 0; color: var(--primary-color);">{{ assignment.title }}</h3>
+                <span style="font-size: 0.8rem; background: var(--surface-color); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border-color);">{{ assignment.class_assigned.name }}</span>
+            </div>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin: 0;">{{ assignment.subject.name }}</p>
+            <p style="font-size: 0.9rem; margin: 10px 0; flex-grow: 1;">{{ assignment.description|truncatewords:20 }}</p>
+            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted); border-top: 1px solid var(--border-light); padding-top: 10px;">
+                <span>Due: {{ assignment.due_date|date:"M d, Y" }}</span>
+                <span>Max Marks: {{ assignment.max_marks }}</span>
+            </div>
+        </div>
+    {% empty %}
+        <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: var(--surface-color); border-radius: 12px; border: 1px dashed var(--border-color);">
+            <i class="ph ph-files" style="font-size: 48px; color: var(--text-muted); margin-bottom: 10px;"></i>
+            <h3 style="margin: 0 0 10px 0; color: var(--text-main);">No Assignments Found</h3>
+            <p style="color: var(--text-muted); margin: 0;">You haven't created any assignments yet.</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

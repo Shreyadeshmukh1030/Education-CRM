@@ -1,0 +1,35 @@
+{% extends 'base/base.html' %}
+{% block title %}Study Materials | EduCore CRM{% endblock %}
+{% block page_title %}Study Materials{% endblock %}
+
+{% block content %}
+<div class="actions-bar" style="display: flex; justify-content: flex-end; margin-bottom: 24px;">
+    <a href="{% url 'material_add' %}" class="btn btn-primary"><i class="ph ph-plus" style="margin-right: 5px;"></i> Upload Material</a>
+</div>
+
+<div class="dashboard-stats">
+    {% for material in materials %}
+        <div class="card" style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <h3 style="margin: 0; color: var(--primary-color);">{{ material.title }}</h3>
+                <span style="font-size: 0.8rem; background: var(--surface-color); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border-color);">{{ material.class_assigned.name }}</span>
+            </div>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin: 0;">{{ material.subject.name }}</p>
+            <p style="font-size: 0.9rem; margin: 10px 0; flex-grow: 1;">{{ material.description|truncatewords:15 }}</p>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-light); padding-top: 15px;">
+                <span style="font-size: 0.8rem; color: var(--text-muted);">{{ material.uploaded_at|date:"M d, Y" }}</span>
+                {% if material.file %}
+                    <a href="{{ material.file.url }}" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.85rem;" target="_blank"><i class="ph ph-download" style="margin-right: 5px;"></i> Download</a>
+                {% endif %}
+            </div>
+        </div>
+    {% empty %}
+        <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: var(--surface-color); border-radius: 12px; border: 1px dashed var(--border-color);">
+            <i class="ph ph-books" style="font-size: 48px; color: var(--text-muted); margin-bottom: 10px;"></i>
+            <h3 style="margin: 0 0 10px 0; color: var(--text-main);">No Study Materials Found</h3>
+            <p style="color: var(--text-muted); margin: 0;">You haven't uploaded any materials yet.</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

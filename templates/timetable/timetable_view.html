@@ -1,0 +1,79 @@
+{% extends 'base/base.html' %}
+{% load custom_filters %}
+{% block title %}Timetable | EduCore CRM{% endblock %}
+{% block page_title %}Class Timetable{% endblock %}
+
+{% block content %}
+<div class="card" style="margin-bottom: 24px;">
+    <form method="get" style="display: flex; gap: 15px; align-items: flex-end;">
+        <div class="form-group" style="margin-bottom: 0; min-width: 250px;">
+            <label class="form-label" for="class_id">Select Class</label>
+            <select name="class_id" id="class_id" class="form-control" onchange="this.form.submit()">
+                <option value="">-- Choose Class --</option>
+                {% for cls in classes %}
+                    <option value="{{ cls.id }}" {% if selected_class and selected_class.id == cls.id %}selected{% endif %}>{{ cls.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </form>
+</div>
+
+{% if selected_class %}
+<div class="card">
+    <h2 style="margin-top: 0; margin-bottom: 20px; font-size: 1.25rem;">Timetable for {{ selected_class.name }}</h2>
+    
+    <div class="table-responsive">
+        <table class="table" style="min-width: 800px; text-align: center;">
+            <thead>
+                <tr>
+                    <th style="width: 100px;">Day / Time</th>
+                    {% for period in periods %}
+                        <th>
+                            <div style="font-weight: 600;">{{ period.name }}</div>
+                            <div style="font-size: 0.8rem; font-weight: 400; color: var(--text-muted);">
+                                {{ period.start_time|time:"H:i" }} - {{ period.end_time|time:"H:i" }}
+                            </div>
+                        </th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for day in days %}
+                <tr>
+                    <td style="font-weight: 600; background-color: var(--background-color);">{{ day }}</td>
+                    
+                    {% for period in periods %}
+                        {% if period.is_break %}
+                            {% if forloop.parentloop.first %}
+                            <td rowspan="7" style="background-color: var(--background-color); writing-mode: vertical-rl; text-align: center; font-weight: 600; color: var(--text-muted); letter-spacing: 5px; text-transform: uppercase;">
+                                {{ period.name }}
+                            </td>
+                            {% endif %}
+                        {% else %}
+                            {% with schedule=schedule_map|get_item:day|get_item:period.id %}
+                                {% if schedule %}
+                                <td style="padding: 10px;">
+                                    <div style="font-weight: 500; color: var(--primary-color);">{{ schedule.subject.name }}</div>
+                                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">{{ schedule.teacher.user.first_name }} {{ schedule.teacher.user.last_name }}</div>
+                                    {% if schedule.room %}
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">Room: {{ schedule.room }}</div>
+                                    {% endif %}
+                                </td>
+                                {% else %}
+                                <td>-</td>
+                                {% endif %}
+                            {% endwith %}
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<div class="card" style="text-align: center; padding: 40px;">
+    <h3 style="color: var(--text-muted);">Please select a class to view the timetable.</h3>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends 'base/base.html' %}
+{% block title %}Marking Attendance - {{ class_obj.name }} | EduCore CRM{% endblock %}
+{% block page_title %}Mark Attendance: {{ class_obj.name }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <div>
+            <h2 style="margin: 0; font-size: 1.25rem;">Date: {{ date_str }}</h2>
+            <p style="color: var(--text-muted); margin: 5px 0 0 0;">Select attendance status for each student.</p>
+        </div>
+        <div>
+            <a href="{% url 'attendance_select' %}" class="btn btn-secondary">Change Class/Date</a>
+        </div>
+    </div>
+
+    <form method="post" action="{% url 'attendance_mark' class_obj.id date_str %}">
+        {% csrf_token %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Roll No</th>
+                        <th>Student Name</th>
+                        <th class="text-center">Present</th>
+                        <th class="text-center">Absent</th>
+                        <th class="text-center">Late</th>
+                        <th class="text-center">Excused</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data in student_data %}
+                    <tr>
+                        <td>{{ data.student.id }}</td> <!-- Using ID as Roll No for now -->
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                {% if data.student.user.profile_photo %}
+                                    <img src="{{ data.student.user.profile_photo.url }}" alt="Profile" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                                {% else %}
+                                    <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--primary-light); color: var(--primary-color); display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                                        {{ data.student.user.first_name|first }}
+                                    </div>
+                                {% endif %}
+                                {{ data.student.user.first_name }} {{ data.student.user.last_name }}
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <input type="radio" name="status_{{ data.student.id }}" value="Present" {% if data.status == 'Present' %}checked{% endif %} style="accent-color: #10B981; transform: scale(1.5);">
+                        </td>
+                        <td class="text-center">
+                            <input type="radio" name="status_{{ data.student.id }}" value="Absent" {% if data.status == 'Absent' %}checked{% endif %} style="accent-color: #EF4444; transform: scale(1.5);">
+                        </td>
+                        <td class="text-center">
+                            <input type="radio" name="status_{{ data.student.id }}" value="Late" {% if data.status == 'Late' %}checked{% endif %} style="accent-color: #F59E0B; transform: scale(1.5);">
+                        </td>
+                        <td class="text-center">
+                            <input type="radio" name="status_{{ data.student.id }}" value="Excused" {% if data.status == 'Excused' %}checked{% endif %} style="accent-color: #3B82F6; transform: scale(1.5);">
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center" style="padding: 20px; color: var(--text-muted);">No students found in this class.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div style="margin-top: 24px; display: flex; justify-content: flex-end;">
+            <button type="submit" class="btn btn-primary" style="padding: 12px 32px; font-size: 1.1rem;">
+                <i class="ph ph-floppy-disk" style="margin-right: 8px;"></i> Save Attendance
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

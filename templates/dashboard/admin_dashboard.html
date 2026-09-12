@@ -1,0 +1,125 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Admin Dashboard - EduCore CRM{% endblock %}
+
+{% block content %}
+<div class="dashboard-header animate-fade-in stagger-1">
+    <h1 style="font-size: 2.5rem; margin-bottom: 10px;">Welcome back, <span style="color: var(--primary-color);">{{ user.get_full_name|default:user.username }}</span> 👋</h1>
+    <p style="color: var(--text-muted); font-size: 1.1rem;">Here is what's happening at your school today.</p>
+</div>
+
+<div class="dashboard-stats">
+    <div class="stat-card animate-fade-in stagger-2">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h3>Total Students</h3>
+            <div style="background: rgba(79, 70, 229, 0.1); padding: 10px; border-radius: 12px; color: var(--primary-color);">
+                <i class="ph ph-users" style="font-size: 24px;"></i>
+            </div>
+        </div>
+        <p>{{ total_students|default:"0" }}</p>
+        <div style="margin-top: 10px; font-size: 0.85rem; color: var(--success-color); display: flex; align-items: center; gap: 5px;">
+            <i class="ph ph-trend-up"></i>
+            <span>Updated dynamically</span>
+        </div>
+    </div>
+
+    <div class="stat-card animate-fade-in stagger-3">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h3>Total Teachers</h3>
+            <div style="background: rgba(16, 185, 129, 0.1); padding: 10px; border-radius: 12px; color: var(--secondary-color);">
+                <i class="ph ph-chalkboard-teacher" style="font-size: 24px;"></i>
+            </div>
+        </div>
+        <p>{{ total_teachers|default:"0" }}</p>
+        <div style="margin-top: 10px; font-size: 0.85rem; color: var(--text-muted); display: flex; align-items: center; gap: 5px;">
+            <i class="ph ph-minus"></i>
+            <span>Updated dynamically</span>
+        </div>
+    </div>
+
+    <div class="stat-card animate-fade-in stagger-4">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h3>Total Classes</h3>
+            <div style="background: rgba(245, 158, 11, 0.1); padding: 10px; border-radius: 12px; color: var(--warning-color);">
+                <i class="ph ph-books" style="font-size: 24px;"></i>
+            </div>
+        </div>
+        <p>{{ total_classes|default:"0" }}</p>
+        <div style="margin-top: 10px; font-size: 0.85rem; color: var(--success-color); display: flex; align-items: center; gap: 5px;">
+            <i class="ph ph-trend-up"></i>
+            <span>Updated dynamically</span>
+        </div>
+    </div>
+
+    <div class="stat-card animate-fade-in stagger-4">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h3>Total Parents</h3>
+            <div style="background: rgba(59, 130, 246, 0.1); padding: 10px; border-radius: 12px; color: var(--info-color);">
+                <i class="ph ph-users-three" style="font-size: 24px;"></i>
+            </div>
+        </div>
+        <p>{{ total_parents|default:"0" }}</p>
+        <div style="margin-top: 10px; font-size: 0.85rem; color: var(--success-color); display: flex; align-items: center; gap: 5px;">
+            <i class="ph ph-trend-up"></i>
+            <span>Updated dynamically</span>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard-sections" style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-top: 24px;">
+    <!-- Recent Activity -->
+    <div class="card animate-fade-in stagger-2">
+        <h3 style="margin-bottom: 20px; font-size: 1.25rem;">Recent Activity</h3>
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+            <div style="display: flex; align-items: center; gap: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color);">
+                <div style="background: rgba(79, 70, 229, 0.1); padding: 10px; border-radius: 50%; color: var(--primary-color);">
+                    <i class="ph ph-user-plus"></i>
+                </div>
+                <div>
+                    <p style="font-weight: 500; margin-bottom: 2px;">New student enrolled</p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Sarah Jenkins joined Class 10-A</p>
+                </div>
+                <span style="margin-left: auto; font-size: 0.85rem; color: var(--text-muted);">2h ago</span>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color);">
+                <div style="background: rgba(16, 185, 129, 0.1); padding: 10px; border-radius: 50%; color: var(--secondary-color);">
+                    <i class="ph ph-check-circle"></i>
+                </div>
+                <div>
+                    <p style="font-weight: 500; margin-bottom: 2px;">Term fees updated</p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Fee structure updated for 2024</p>
+                </div>
+                <span style="margin-left: auto; font-size: 0.85rem; color: var(--text-muted);">5h ago</span>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="background: rgba(245, 158, 11, 0.1); padding: 10px; border-radius: 50%; color: var(--warning-color);">
+                    <i class="ph ph-calendar"></i>
+                </div>
+                <div>
+                    <p style="font-weight: 500; margin-bottom: 2px;">Event Scheduled</p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Annual Sports Day scheduled for Dec 15</p>
+                </div>
+                <span style="margin-left: auto; font-size: 0.85rem; color: var(--text-muted);">1d ago</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Actions -->
+    <div class="card animate-fade-in stagger-3">
+        <h3 style="margin-bottom: 20px; font-size: 1.25rem;">Quick Actions</h3>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            <a href="#" class="btn btn-primary" style="width: 100%; justify-content: flex-start; padding: 12px 16px;">
+                <i class="ph ph-plus-circle" style="margin-right: 10px; font-size: 1.2rem;"></i> Add New Student
+            </a>
+            <a href="#" class="btn btn-secondary" style="width: 100%; justify-content: flex-start; padding: 12px 16px;">
+                <i class="ph ph-envelope-simple" style="margin-right: 10px; font-size: 1.2rem;"></i> Send Notice
+            </a>
+            <a href="#" class="btn btn-secondary" style="width: 100%; justify-content: flex-start; padding: 12px 16px;">
+                <i class="ph ph-file-text" style="margin-right: 10px; font-size: 1.2rem;"></i> Generate Report
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

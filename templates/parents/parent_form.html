@@ -1,0 +1,66 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Add Parent - EduCore CRM{% endblock %}
+
+{% block content %}
+<div class="dashboard-header animate-fade-in stagger-1" style="margin-bottom: 24px;">
+    <h1 style="font-size: 2rem; margin-bottom: 5px;">Add New Parent</h1>
+    <p style="color: var(--text-muted);">Enter parent/guardian details to create a new profile.</p>
+</div>
+
+<div class="card animate-fade-in stagger-2" style="max-width: 800px;">
+    <form method="post" action="{% url 'parent_add' %}">
+        {% csrf_token %}
+        
+        {% if form.errors %}
+            <div style="background-color: rgba(239, 68, 68, 0.1); color: #DC2626; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(239, 68, 68, 0.2);">
+                <p style="font-weight: 600; margin-bottom: 5px;">Please correct the following errors:</p>
+                {{ form.errors }}
+            </div>
+        {% endif %}
+
+        <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; color: var(--info-color);">Account Information</h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label for="{{ form.first_name.id_for_label }}" class="form-label">First Name *</label>
+                <input type="text" name="{{ form.first_name.html_name }}" id="{{ form.first_name.id_for_label }}" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.last_name.id_for_label }}" class="form-label">Last Name *</label>
+                <input type="text" name="{{ form.last_name.html_name }}" id="{{ form.last_name.id_for_label }}" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.email.id_for_label }}" class="form-label">Email Address *</label>
+                <input type="email" name="{{ form.email.html_name }}" id="{{ form.email.id_for_label }}" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.relationship_to_student.id_for_label }}" class="form-label">Relationship to Student</label>
+                <input type="text" name="{{ form.relationship_to_student.html_name }}" id="{{ form.relationship_to_student.id_for_label }}" class="form-control" placeholder="e.g. Father, Mother, Guardian">
+            </div>
+        </div>
+
+        <h3 style="margin-bottom: 20px; margin-top: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; color: var(--info-color);">Additional Details</h3>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label for="{{ form.occupation.id_for_label }}" class="form-label">Occupation</label>
+                <input type="text" name="{{ form.occupation.html_name }}" id="{{ form.occupation.id_for_label }}" class="form-control">
+            </div>
+        </div>
+        
+        <div class="form-group" style="margin-top: 20px;">
+            <label for="{{ form.address.id_for_label }}" class="form-label">Home Address</label>
+            <textarea name="{{ form.address.html_name }}" id="{{ form.address.id_for_label }}" class="form-control" rows="3"></textarea>
+        </div>
+
+        <div style="display: flex; gap: 15px; margin-top: 30px; justify-content: flex-end;">
+            <a href="{% url 'parent_list' %}" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary" style="background-color: var(--info-color);"><i class="ph ph-check" style="margin-right: 5px;"></i> Save Parent</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

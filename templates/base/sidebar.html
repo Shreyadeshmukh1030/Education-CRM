@@ -1,0 +1,69 @@
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <h2><i class="ph ph-student"></i> EduCore</h2>
+    </div>
+    <nav class="sidebar-nav">
+        <ul>
+            <li>
+                <a href="{% url 'dashboard' %}" class="{% if request.path == '/' %}active{% endif %}">
+                    <span class="sidebar-icon"><i class="ph ph-squares-four"></i></span>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'student_list' %}" class="{% if '/students/' in request.path %}active{% endif %}">
+                    <span class="sidebar-icon"><i class="ph ph-users"></i></span>
+                    <span>Students</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'teacher_list' %}" class="{% if '/teachers/' in request.path %}active{% endif %}">
+                    <span class="sidebar-icon"><i class="ph ph-chalkboard-teacher"></i></span>
+                    <span>Teachers</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'parent_list' %}" class="{% if '/parents/' in request.path %}active{% endif %}">
+                    <span class="sidebar-icon"><i class="ph ph-users-three"></i></span>
+                    <span>Parents</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'class_list' %}" class="{% if '/classes/' in request.path %}active{% endif %}">
+                    <span class="sidebar-icon"><i class="ph ph-books"></i></span>
+                    <span>Classes</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'attendance_select' %}" class="{% if '/attendance/' in request.path %}active{% endif %}">
+                    <span class="sidebar-icon"><i class="ph ph-calendar-check"></i></span>
+                    <span>Attendance</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'timetable_view' %}" class="{% if '/timetable/' in request.path %}active{% endif %}">
+                    <span class="sidebar-icon"><i class="ph ph-clock"></i></span>
+                    <span>Timetable</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'assignment_list' %}" class="{% if '/assignments/' in request.path %}active{% endif %}">
+                    <span class="sidebar-icon"><i class="ph ph-clipboard-text"></i></span>
+                    <span>Assignments</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'material_list' %}" class="{% if '/materials/' in request.path %}active{% endif %}">
+                    <span class="sidebar-icon"><i class="ph ph-file-text"></i></span>
+                    <span>Study Materials</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'school_settings' %}" class="{% if '/school/' in request.path %}active{% endif %}">
+                    <span class="sidebar-icon"><i class="ph ph-gear"></i></span>
+                    <span>Settings</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</aside>

@@ -1,0 +1,43 @@
+{% extends 'base/base.html' %}
+{% block title %}Mark Attendance | EduCore CRM{% endblock %}
+{% block page_title %}Mark Attendance{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 600px; margin: 0 auto;">
+    <h2 style="margin-bottom: 20px;">Select Class and Date</h2>
+    
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+        <div class="form-group">
+            <label class="form-label" for="class_select">Select Class</label>
+            <select id="class_select" class="form-control">
+                <option value="">-- Choose Class --</option>
+                {% for cls in classes %}
+                    <option value="{{ cls.id }}">{{ cls.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label" for="date_select">Date</label>
+            <input type="date" id="date_select" class="form-control" value="{{ today }}">
+        </div>
+        
+        <button id="proceed_btn" class="btn btn-primary" style="width: 100%;">Proceed</button>
+    </div>
+</div>
+
+<script>
+    document.getElementById('proceed_btn').addEventListener('click', function() {
+        const classId = document.getElementById('class_select').value;
+        const dateStr = document.getElementById('date_select').value;
+        
+        if (!classId || !dateStr) {
+            alert('Please select a class and date.');
+            return;
+        }
+        
+        // Redirect to the mark view
+        window.location.href = `/attendance/mark/${classId}/${dateStr}/`;
+    });
+</script>
+{% endblock %}

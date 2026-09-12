@@ -1,0 +1,26 @@
+<header class="navbar">
+    <div class="navbar-left">
+        <button id="sidebar-toggle">
+            <i class="ph ph-list"></i>
+        </button>
+        <div class="breadcrumbs">
+            <span>Dashboard</span>
+        </div>
+    </div>
+    <div class="navbar-right">
+        {% if user.is_authenticated %}
+            <div class="user-info">
+                <i class="ph ph-user-circle" style="font-size: 24px; color: var(--primary-color);"></i>
+                <span>{{ user.get_full_name|default:user.username }} ({{ user.role.name|default:"Admin" }})</span>
+            </div>
+            <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-logout" style="background:none; border:none; cursor:pointer;">
+                    <i class="ph ph-sign-out" style="margin-right: 5px;"></i> Logout
+                </button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}" class="btn btn-login"><i class="ph ph-sign-in" style="margin-right: 5px;"></i> Login</a>
+        {% endif %}
+    </div>
+</header>

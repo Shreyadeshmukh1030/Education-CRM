@@ -1,0 +1,55 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Classes - EduCore CRM{% endblock %}
+
+{% block content %}
+<div class="dashboard-header animate-fade-in stagger-1" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+    <div>
+        <h1 style="font-size: 2rem; margin-bottom: 5px;">Classes</h1>
+        <p style="color: var(--text-muted);">Manage academic grades and levels.</p>
+    </div>
+    <a href="{% url 'class_add' %}" class="btn btn-primary" style="background-color: var(--warning-color); color: #fff; box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.2);">
+        <i class="ph ph-plus-circle" style="margin-right: 8px; font-size: 1.2rem;"></i> Add Class
+    </a>
+</div>
+
+<div class="card animate-fade-in stagger-2" style="padding: 0; overflow: hidden;">
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead style="background-color: var(--background-color); border-bottom: 2px solid var(--border-color);">
+                <tr>
+                    <th style="padding: 15px 20px; font-weight: 600; color: var(--text-muted);">Order</th>
+                    <th style="padding: 15px 20px; font-weight: 600; color: var(--text-muted);">Class Name</th>
+                    <th style="padding: 15px 20px; font-weight: 600; color: var(--text-muted); text-align: right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for class_obj in classes %}
+                <tr style="border-bottom: 1px solid var(--border-color); transition: background-color var(--transition-fast);">
+                    <td style="padding: 15px 20px; color: var(--text-muted);">{{ class_obj.order }}</td>
+                    <td style="padding: 15px 20px; font-weight: 500;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(245, 158, 11, 0.1); color: var(--warning-color); display: flex; justify-content: center; align-items: center; font-weight: 600;">
+                                <i class="ph ph-books"></i>
+                            </div>
+                            {{ class_obj.name }}
+                        </div>
+                    </td>
+                    <td style="padding: 15px 20px; text-align: right;">
+                        <a href="#" style="color: var(--text-muted); margin-right: 10px; transition: color var(--transition-fast);" onmouseover="this.style.color='var(--primary-color)'" onmouseout="this.style.color='var(--text-muted)'"><i class="ph ph-pencil-simple" style="font-size: 1.2rem;"></i></a>
+                        <a href="#" style="color: var(--text-muted); transition: color var(--transition-fast);" onmouseover="this.style.color='var(--danger-color)'" onmouseout="this.style.color='var(--text-muted)'"><i class="ph ph-trash" style="font-size: 1.2rem;"></i></a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" style="padding: 30px; text-align: center; color: var(--text-muted);">
+                        <i class="ph ph-books" style="font-size: 3rem; margin-bottom: 10px; color: var(--border-color);"></i>
+                        <p>No classes found. Add your first class to get started.</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

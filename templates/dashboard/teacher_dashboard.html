@@ -1,0 +1,88 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Teacher Dashboard | EduCore CRM{% endblock %}
+
+{% block page_title %}Teacher Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    
+    <!-- Top Statistics Cards -->
+    <div class="dashboard-stats">
+        <div class="stat-card">
+            <h3>Assigned Students</h3>
+            <p>{{ total_assigned_students }}</p>
+        </div>
+        <div class="stat-card">
+            <h3>Today's Classes</h3>
+            <p>{{ today_classes_count }}</p>
+        </div>
+        <div class="stat-card">
+            <h3>Pending Assignments</h3>
+            <p>{{ pending_assignments }}</p>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="dashboard-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-top: 24px;">
+        
+        <!-- Left Column: Today's Schedule -->
+        <div class="card">
+            <h2 style="font-size: 1.25rem; margin-bottom: 16px;">Today's Schedule</h2>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Period</th>
+                            <th>Subject</th>
+                            <th>Class</th>
+                            <th>Time</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Placeholder for schedule rows -->
+                        <tr>
+                            <td colspan="5" class="text-center" style="padding: 20px; color: var(--text-muted);">No classes scheduled for today.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Right Column: Quick Actions & Alerts -->
+        <div class="dashboard-sidebar" style="display: flex; flex-direction: column; gap: 24px;">
+            
+            <div class="card quick-actions">
+                <h2 style="font-size: 1.25rem; margin-bottom: 16px;">Quick Actions</h2>
+                <div style="display: grid; grid-template-columns: 1fr; gap: 12px;">
+                    <a href="#" class="btn btn-primary" style="justify-content: flex-start; padding: 12px 16px;">
+                        <i class="fas fa-clipboard-check" style="margin-right: 10px;"></i> Mark Attendance
+                    </a>
+                    <a href="#" class="btn btn-secondary" style="justify-content: flex-start; padding: 12px 16px;">
+                        <i class="fas fa-file-upload" style="margin-right: 10px;"></i> Upload Material
+                    </a>
+                    <a href="#" class="btn btn-secondary" style="justify-content: flex-start; padding: 12px 16px;">
+                        <i class="fas fa-tasks" style="margin-right: 10px;"></i> Create Assignment
+                    </a>
+                </div>
+            </div>
+
+            <div class="card alerts">
+                <h2 style="font-size: 1.25rem; margin-bottom: 16px;">Notifications</h2>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li style="padding: 12px 0; border-bottom: 1px solid var(--border-color); display: flex; align-items: flex-start; gap: 12px;">
+                        <i class="fas fa-bell" style="color: var(--warning-color); margin-top: 4px;"></i>
+                        <div>
+                            <p style="margin: 0; font-weight: 500; font-size: 0.95rem;">Please mark attendance for Class 10A</p>
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">2 hours ago</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}
