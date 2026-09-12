@@ -1,69 +1,188 @@
-<aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-        <h2><i class="ph ph-student"></i> EduCore</h2>
+<aside class="sidebar" id="sidebar" style="background-color: #111827;">
+    <div class="sidebar-header" style="flex-direction: column; align-items: flex-start; padding: 24px 20px; border-bottom: none; gap: 4px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <i class="ph ph-books" style="font-size: 28px; color: #fff;"></i>
+            <h2 style="font-size: 1.2rem; font-weight: 600; margin: 0;">Bright Future School</h2>
+        </div>
+        <span style="color: #9CA3AF; font-size: 0.75rem; letter-spacing: 0.5px; margin-left: 40px;">Learn · Grow · Succeed</span>
     </div>
+    
     <nav class="sidebar-nav">
         <ul>
-            <li>
-                <a href="{% url 'dashboard' %}" class="{% if request.path == '/' %}active{% endif %}">
-                    <span class="sidebar-icon"><i class="ph ph-squares-four"></i></span>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'student_list' %}" class="{% if '/students/' in request.path %}active{% endif %}">
-                    <span class="sidebar-icon"><i class="ph ph-users"></i></span>
-                    <span>Students</span>
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'teacher_list' %}" class="{% if '/teachers/' in request.path %}active{% endif %}">
-                    <span class="sidebar-icon"><i class="ph ph-chalkboard-teacher"></i></span>
-                    <span>Teachers</span>
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'parent_list' %}" class="{% if '/parents/' in request.path %}active{% endif %}">
-                    <span class="sidebar-icon"><i class="ph ph-users-three"></i></span>
-                    <span>Parents</span>
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'class_list' %}" class="{% if '/classes/' in request.path %}active{% endif %}">
-                    <span class="sidebar-icon"><i class="ph ph-books"></i></span>
-                    <span>Classes</span>
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'attendance_select' %}" class="{% if '/attendance/' in request.path %}active{% endif %}">
-                    <span class="sidebar-icon"><i class="ph ph-calendar-check"></i></span>
-                    <span>Attendance</span>
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'timetable_view' %}" class="{% if '/timetable/' in request.path %}active{% endif %}">
-                    <span class="sidebar-icon"><i class="ph ph-clock"></i></span>
-                    <span>Timetable</span>
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'assignment_list' %}" class="{% if '/assignments/' in request.path %}active{% endif %}">
-                    <span class="sidebar-icon"><i class="ph ph-clipboard-text"></i></span>
-                    <span>Assignments</span>
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'material_list' %}" class="{% if '/materials/' in request.path %}active{% endif %}">
-                    <span class="sidebar-icon"><i class="ph ph-file-text"></i></span>
-                    <span>Study Materials</span>
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'school_settings' %}" class="{% if '/school/' in request.path %}active{% endif %}">
-                    <span class="sidebar-icon"><i class="ph ph-gear"></i></span>
-                    <span>Settings</span>
-                </a>
-            </li>
+            {% if request.user.role.name == 'Teacher' %}
+                <!-- TEACHER SIDEBAR -->
+                <li>
+                    <a href="{% url 'dashboard' %}" class="{% if request.path == '/' %}active{% endif %}" style="{% if request.path == '/' %}background: #4F46E5; color: #fff;{% endif %}">
+                        <span class="sidebar-icon"><i class="ph ph-house"></i></span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'class_list' %}">
+                        <span class="sidebar-icon"><i class="ph ph-book-open"></i></span>
+                        <span>My Classes</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'student_list' %}">
+                        <span class="sidebar-icon"><i class="ph ph-users"></i></span>
+                        <span>Students</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'attendance_select' %}">
+                        <span class="sidebar-icon"><i class="ph ph-check-circle"></i></span>
+                        <span>Attendance</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'material_list' %}">
+                        <span class="sidebar-icon"><i class="ph ph-file-text"></i></span>
+                        <span>Study Material</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'announcements' %}">
+                        <span class="sidebar-icon"><i class="ph ph-megaphone"></i></span>
+                        <span>Announcements</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'examinations' %}">
+                        <span class="sidebar-icon"><i class="ph ph-pencil-simple"></i></span>
+                        <span>Examinations</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'results' %}">
+                        <span class="sidebar-icon"><i class="ph ph-chart-line-up"></i></span>
+                        <span>Results</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'attendance_reports' %}">
+                        <span class="sidebar-icon"><i class="ph ph-file-search"></i></span>
+                        <span>Attendance Reports</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'syllabus' %}">
+                        <span class="sidebar-icon"><i class="ph ph-book-bookmark"></i></span>
+                        <span>Syllabus</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'timetable_view' %}">
+                        <span class="sidebar-icon"><i class="ph ph-calendar-blank"></i></span>
+                        <span>Schedule</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'fees' %}">
+                        <span class="sidebar-icon"><i class="ph ph-graduation-cap"></i></span>
+                        <span>Fees (Class View)</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'messages_app' %}">
+                        <span class="sidebar-icon"><i class="ph ph-chat-circle-dots"></i></span>
+                        <span>Messages</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'school_updates' %}">
+                        <span class="sidebar-icon"><i class="ph ph-broadcast"></i></span>
+                        <span>School Updates</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'reminders' %}">
+                        <span class="sidebar-icon"><i class="ph ph-bell"></i></span>
+                        <span>Reminders</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'my_profile' %}">
+                        <span class="sidebar-icon"><i class="ph ph-user"></i></span>
+                        <span>Profile</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'my_settings' %}">
+                        <span class="sidebar-icon"><i class="ph ph-gear"></i></span>
+                        <span>Settings</span>
+                    </a>
+                </li>
+
+            {% else %}
+                <!-- DEFAULT ADMIN SIDEBAR -->
+                <li>
+                    <a href="{% url 'dashboard' %}" class="{% if request.path == '/' %}active{% endif %}">
+                        <span class="sidebar-icon"><i class="ph ph-squares-four"></i></span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'student_list' %}" class="{% if '/students/' in request.path %}active{% endif %}">
+                        <span class="sidebar-icon"><i class="ph ph-users"></i></span>
+                        <span>Students</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'teacher_list' %}" class="{% if '/teachers/' in request.path %}active{% endif %}">
+                        <span class="sidebar-icon"><i class="ph ph-chalkboard-teacher"></i></span>
+                        <span>Teachers</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'parent_list' %}" class="{% if '/parents/' in request.path %}active{% endif %}">
+                        <span class="sidebar-icon"><i class="ph ph-users-three"></i></span>
+                        <span>Parents</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'class_list' %}" class="{% if '/classes/' in request.path %}active{% endif %}">
+                        <span class="sidebar-icon"><i class="ph ph-books"></i></span>
+                        <span>Classes</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'attendance_select' %}" class="{% if '/attendance/' in request.path %}active{% endif %}">
+                        <span class="sidebar-icon"><i class="ph ph-calendar-check"></i></span>
+                        <span>Attendance</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'timetable_view' %}" class="{% if '/timetable/' in request.path %}active{% endif %}">
+                        <span class="sidebar-icon"><i class="ph ph-clock"></i></span>
+                        <span>Timetable</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'assignment_list' %}" class="{% if '/assignments/' in request.path %}active{% endif %}">
+                        <span class="sidebar-icon"><i class="ph ph-clipboard-text"></i></span>
+                        <span>Assignments</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'material_list' %}" class="{% if '/materials/' in request.path %}active{% endif %}">
+                        <span class="sidebar-icon"><i class="ph ph-file-text"></i></span>
+                        <span>Study Materials</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'school_settings' %}" class="{% if '/school/' in request.path %}active{% endif %}">
+                        <span class="sidebar-icon"><i class="ph ph-gear"></i></span>
+                        <span>Settings</span>
+                    </a>
+                </li>
+            {% endif %}
         </ul>
     </nav>
+    {% if request.user.role.name == 'Teacher' %}
+    <div style="padding: 20px; text-align: center; color: #6B7280; font-size: 0.8rem; border-top: 1px solid rgba(255,255,255,0.1);">
+        <i class="ph ph-graduation-cap" style="font-size: 24px; display: block; margin-bottom: 8px;"></i>
+        Great teachers<br>build great futures
+    </div>
+    {% endif %}
 </aside>

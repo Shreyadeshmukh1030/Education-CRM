@@ -1,22 +1,39 @@
-<header class="navbar">
-    <div class="navbar-left">
-        <button id="sidebar-toggle">
+<header class="navbar" style="border-bottom: 1px solid #F3F4F6; background: #fff; padding: 0 40px;">
+    <div class="navbar-left" style="flex: 1; display: flex; align-items: center; gap: 20px;">
+        <button id="sidebar-toggle" style="background:none; border:none; font-size:24px; color:var(--text-muted); cursor:pointer;">
             <i class="ph ph-list"></i>
         </button>
+        {% if request.user.role.name != 'Teacher' %}
         <div class="breadcrumbs">
             <span>Dashboard</span>
         </div>
+        {% endif %}
     </div>
-    <div class="navbar-right">
+    
+    <div class="navbar-center" style="flex: 2; display: flex; justify-content: center;">
+        <div class="search-bar" style="background: #F3F4F6; border-radius: 20px; padding: 8px 16px; display: flex; align-items: center; width: 100%; max-width: 500px;">
+            <i class="ph ph-magnifying-glass" style="color: #9CA3AF; margin-right: 8px; font-size: 18px;"></i>
+            <input type="text" placeholder="Search students, classes, or anything..." style="border: none; background: transparent; width: 100%; outline: none; color: var(--text-main); font-size: 0.9rem;">
+        </div>
+    </div>
+    
+    <div class="navbar-right" style="flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 24px;">
         {% if user.is_authenticated %}
-            <div class="user-info">
-                <i class="ph ph-user-circle" style="font-size: 24px; color: var(--primary-color);"></i>
-                <span>{{ user.get_full_name|default:user.username }} ({{ user.role.name|default:"Admin" }})</span>
+            <div class="notifications" style="position: relative; cursor: pointer;">
+                <i class="ph ph-bell" style="font-size: 24px; color: var(--text-muted);"></i>
+                <span style="position: absolute; top: -2px; right: -2px; background: #EF4444; color: white; font-size: 0.65rem; font-weight: bold; height: 16px; width: 16px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid #fff;">3</span>
             </div>
-            <form method="post" action="{% url 'logout' %}" style="display:inline;">
+            <div class="user-info" style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                <img src="https://ui-avatars.com/api/?name={{ user.first_name }}+{{ user.last_name }}&background=E0E7FF&color=4F46E5" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                <div style="display: flex; flex-direction: column; line-height: 1.2;">
+                    <span style="font-weight: 600; font-size: 0.9rem; color: var(--text-main);">{{ user.get_full_name|default:user.username }}</span>
+                    <span style="font-size: 0.8rem; color: var(--text-muted);">{{ user.role.name|default:"Admin" }}</span>
+                </div>
+            </div>
+            <form method="post" action="{% url 'logout' %}" style="display:inline; margin-left: 10px;">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-logout" style="background:none; border:none; cursor:pointer;">
-                    <i class="ph ph-sign-out" style="margin-right: 5px;"></i> Logout
+                <button type="submit" title="Logout" style="background:none; border:none; cursor:pointer; color: var(--text-muted); font-size: 24px;">
+                    <i class="ph ph-sign-out"></i>
                 </button>
             </form>
         {% else %}

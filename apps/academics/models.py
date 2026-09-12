@@ -97,3 +97,31 @@ class AssignmentSubmission(models.Model):
     
     def __str__(self):
         return f"{self.student.user.first_name} - {self.assignment.title}"
+
+class Announcement(models.Model):
+    TYPE_CHOICES = (
+        ('Test', 'Test'),
+        ('Assignment', 'Assignment'),
+        ('Event', 'Event'),
+        ('Material', 'Material'),
+        ('School Notice', 'School Notice'),
+    )
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    category = models.CharField(max_length=20, choices=TYPE_CHOICES, default='School Notice')
+    class_assigned = models.ForeignKey(Class, on_delete=models.SET_NULL, null=True, blank=True, related_name='announcements', help_text="Leave blank for school-wide")
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.title
+
+class Exam(models.Model):
+    title = models.CharField(max_length=255)
+    class_assigned = models.ForeignKey(Class, on_delete=models.CASCADE, related_name='exams')
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='exams')
+    date = models.DateField()
+    max_marks = models.DecimalField(max_digits=5, decimal_places=2, default=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.title} - {self.class_assigned.name}"

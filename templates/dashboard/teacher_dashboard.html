@@ -3,86 +3,282 @@
 
 {% block title %}Teacher Dashboard | EduCore CRM{% endblock %}
 
-{% block page_title %}Teacher Dashboard{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/teacher_dashboard.css' %}">
+{% endblock %}
 
 {% block content %}
-<div class="dashboard-container">
+<div class="teacher-dashboard">
     
-    <!-- Top Statistics Cards -->
-    <div class="dashboard-stats">
-        <div class="stat-card">
-            <h3>Assigned Students</h3>
-            <p>{{ total_assigned_students }}</p>
+    <!-- Welcome Header -->
+    <div class="dashboard-header">
+        <div>
+            <h1>Good Morning, {{ user.first_name }}!</h1>
+            <p>Here's what's happening at your school today.</p>
         </div>
-        <div class="stat-card">
-            <h3>Today's Classes</h3>
-            <p>{{ today_classes_count }}</p>
-        </div>
-        <div class="stat-card">
-            <h3>Pending Assignments</h3>
-            <p>{{ pending_assignments }}</p>
+        <div class="dashboard-date">
+            <i class="ph ph-calendar-blank" style="font-size: 20px;"></i>
+            {{ today|date:"D, d M Y" }}
         </div>
     </div>
 
-    <!-- Main Content Area -->
-    <div class="dashboard-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-top: 24px;">
-        
-        <!-- Left Column: Today's Schedule -->
-        <div class="card">
-            <h2 style="font-size: 1.25rem; margin-bottom: 16px;">Today's Schedule</h2>
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Period</th>
-                            <th>Subject</th>
-                            <th>Class</th>
-                            <th>Time</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Placeholder for schedule rows -->
-                        <tr>
-                            <td colspan="5" class="text-center" style="padding: 20px; color: var(--text-muted);">No classes scheduled for today.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Right Column: Quick Actions & Alerts -->
-        <div class="dashboard-sidebar" style="display: flex; flex-direction: column; gap: 24px;">
-            
-            <div class="card quick-actions">
-                <h2 style="font-size: 1.25rem; margin-bottom: 16px;">Quick Actions</h2>
-                <div style="display: grid; grid-template-columns: 1fr; gap: 12px;">
-                    <a href="#" class="btn btn-primary" style="justify-content: flex-start; padding: 12px 16px;">
-                        <i class="fas fa-clipboard-check" style="margin-right: 10px;"></i> Mark Attendance
-                    </a>
-                    <a href="#" class="btn btn-secondary" style="justify-content: flex-start; padding: 12px 16px;">
-                        <i class="fas fa-file-upload" style="margin-right: 10px;"></i> Upload Material
-                    </a>
-                    <a href="#" class="btn btn-secondary" style="justify-content: flex-start; padding: 12px 16px;">
-                        <i class="fas fa-tasks" style="margin-right: 10px;"></i> Create Assignment
-                    </a>
+    <!-- Top Stats Row -->
+    <div class="stats-grid">
+        <div class="stat-card-new">
+            <div class="stat-card-header">
+                <div class="stat-icon blue"><i class="ph ph-users-three"></i></div>
+                <div class="stat-title">
+                    <h3>Total Students</h3>
+                    <span>(Your Classes)</span>
                 </div>
             </div>
-
-            <div class="card alerts">
-                <h2 style="font-size: 1.25rem; margin-bottom: 16px;">Notifications</h2>
-                <ul style="list-style: none; padding: 0; margin: 0;">
-                    <li style="padding: 12px 0; border-bottom: 1px solid var(--border-color); display: flex; align-items: flex-start; gap: 12px;">
-                        <i class="fas fa-bell" style="color: var(--warning-color); margin-top: 4px;"></i>
-                        <div>
-                            <p style="margin: 0; font-weight: 500; font-size: 0.95rem;">Please mark attendance for Class 10A</p>
-                            <span style="font-size: 0.8rem; color: var(--text-muted);">2 hours ago</span>
-                        </div>
-                    </li>
-                </ul>
+            <div class="stat-value">{{ total_assigned_students }}</div>
+            <div class="stat-meta success">+12 this month</div>
+        </div>
+        
+        <div class="stat-card-new">
+            <div class="stat-card-header">
+                <div class="stat-icon green"><i class="ph ph-books"></i></div>
+                <div class="stat-title">
+                    <h3>Total Classes</h3>
+                    <span>(Assigned)</span>
+                </div>
             </div>
-            
+            <div class="stat-value">{{ total_classes_assigned }}</div>
+            <div class="stat-meta success"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#16A34A;margin-right:4px;"></span>Active</div>
+        </div>
+        
+        <div class="stat-card-new">
+            <div class="stat-card-header">
+                <div class="stat-icon purple"><i class="ph ph-clipboard-text"></i></div>
+                <div class="stat-title">
+                    <h3>Today's Attendance</h3>
+                    <span>(Your Classes)</span>
+                </div>
+            </div>
+            <div class="stat-value">{{ attendance_percentage }}%</div>
+            <div class="stat-meta">{{ total_present }} / {{ total_marked }} present</div>
+        </div>
+        
+        <div class="stat-card-new">
+            <div class="stat-card-header">
+                <div class="stat-icon yellow"><i class="ph ph-file-text"></i></div>
+                <div class="stat-title">
+                    <h3>Pending Assignments</h3>
+                    <span></span>
+                </div>
+            </div>
+            <div class="stat-value">{{ pending_assignments }}</div>
+            <a href="{% url 'assignment_list' %}" class="stat-meta action" style="text-decoration:none;">View Details <i class="ph ph-arrow-right"></i></a>
         </div>
     </div>
+
+    <!-- Class-wise Student Overview (Span 8 cols) -->
+    <div class="overview-section">
+        <div class="section-header">
+            <h3>Class-wise Student Overview</h3>
+            <select style="padding:6px 12px; border:1px solid #E5E7EB; border-radius:8px; background:#fff; outline:none;">
+                <option>All Classes</option>
+            </select>
+        </div>
+        
+        <div class="class-grid">
+            {% for item in class_overview %}
+            <div class="class-card">
+                <div class="class-card-head">
+                    <i class="ph ph-users"></i> {{ item.class_obj.name }}
+                </div>
+                <div class="class-stats">
+                    <p style="font-weight:600; color:var(--text-main); font-size:1rem; margin-bottom:4px;">{{ item.students_count }} Students</p>
+                    <p>{{ item.present }} Present | {{ item.absent }} Absent</p>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" style="width: {{ item.percentage }}%; background: {% if item.percentage >= 90 %}#10B981{% elif item.percentage >= 75 %}#F59E0B{% else %}#EF4444{% endif %};"></div>
+                    </div>
+                    <span class="progress-text">{{ item.percentage }}%</span>
+                </div>
+            </div>
+            {% empty %}
+            <div style="grid-column: 1/-1; text-align:center; padding: 20px; color:var(--text-muted);">
+                No classes assigned yet.
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Quick Actions (Span 4 cols) -->
+    <div class="quick-actions-section">
+        <div class="section-header">
+            <h3>Quick Actions</h3>
+        </div>
+        <div class="actions-grid">
+            <button class="action-btn" onclick="location.href='{% url 'attendance_select' %}'">
+                <i class="ph ph-users-three" style="color:#3B82F6;"></i> Take<br>Attendance
+            </button>
+            <button class="action-btn" onclick="location.href='{% url 'material_list' %}'">
+                <i class="ph ph-book-open" style="color:#9333EA;"></i> Add Study<br>Material
+            </button>
+            <button class="action-btn" onclick="location.href='{% url 'announcements' %}'">
+                <i class="ph ph-megaphone" style="color:#EC4899;"></i> Create<br>Announcement
+            </button>
+            <button class="action-btn" onclick="location.href='{% url 'examinations' %}'">
+                <i class="ph ph-clipboard-text" style="color:#10B981;"></i> Conduct<br>Exam
+            </button>
+            <button class="action-btn" onclick="location.href='{% url 'assignment_list' %}'">
+                <i class="ph ph-file-text" style="color:#F59E0B;"></i> Add<br>Assignment
+            </button>
+            <button class="action-btn" onclick="location.href='{% url 'results' %}'">
+                <i class="ph ph-chart-bar" style="color:#06B6D4;"></i> View<br>Results
+            </button>
+        </div>
+    </div>
+
+    <!-- Row 3: Upcoming Classes, Announcements, Today's Attendance -->
+    <div class="dashboard-panel col-1">
+        <div class="section-header">
+            <h3>Upcoming Classes</h3>
+            <a href="{% url 'timetable_view' %}" class="section-action">View All</a>
+        </div>
+        <div class="panel-content">
+            {% for sched in upcoming_classes %}
+            <div class="list-item">
+                <div class="item-icon" style="background: #E0E7FF; color: #4F46E5;">
+                    <i class="ph ph-file-text"></i>
+                </div>
+                <div class="item-content">
+                    <h4>{{ sched.period.start_time|time:"h:i A" }} - {{ sched.period.end_time|time:"h:i A" }}</h4>
+                    <p>{{ sched.class_assigned.name }} - {{ sched.subject.name }}</p>
+                </div>
+                <button class="item-action">Start Class</button>
+            </div>
+            {% empty %}
+            <p style="color:var(--text-muted); text-align:center;">No upcoming classes today.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="dashboard-panel col-2">
+        <div class="section-header">
+            <h3>Recent Announcements</h3>
+            <a href="{% url 'announcements' %}" class="section-action">View All</a>
+        </div>
+        <div class="panel-content">
+            {% for ann in recent_announcements %}
+            <div class="list-item">
+                <div class="item-icon" style="background: #FEF3C7; color: #D97706;">
+                    <i class="ph ph-megaphone"></i>
+                </div>
+                <div class="item-content">
+                    <h4>{{ ann.title }}</h4>
+                    <p style="font-size:0.75rem;">{{ ann.content|truncatechars:50 }}<br>{{ ann.created_at|date:"d M Y" }}</p>
+                </div>
+                <span class="item-tag tag-red">{{ ann.category }}</span>
+            </div>
+            {% empty %}
+            <p style="color:var(--text-muted); text-align:center;">No recent announcements.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="dashboard-panel col-3">
+        <div class="section-header" style="margin-bottom:0;">
+            <h3>Today's Attendance <span style="font-size:0.9rem;color:var(--text-muted);font-weight:normal;">(Your Classes)</span></h3>
+        </div>
+        <div class="donut-chart-container">
+            <div class="donut-chart">
+                <div class="donut-inner">
+                    <h2>{{ attendance_percentage }}%</h2>
+                    <span>Present</span>
+                </div>
+            </div>
+            <div class="donut-legend">
+                <div class="legend-item"><span class="legend-dot" style="background:#10B981;"></span> Present <span>{{ total_present }}</span></div>
+                <div class="legend-item"><span class="legend-dot" style="background:#EF4444;"></span> Absent <span>{{ total_absent }}</span></div>
+                <div class="legend-item"><span class="legend-dot" style="background:#F59E0B;"></span> Late <span>{{ total_late }}</span></div>
+            </div>
+        </div>
+        <div style="background: #F8FAFC; padding: 16px; border-radius: 12px; margin-top: auto;">
+            <p style="font-size:0.85rem; font-weight:600; margin-bottom:12px;">Quick Attendance Actions</p>
+            <div style="display:flex; gap:12px;">
+                <button class="action-btn" style="flex:2; padding:10px; justify-content:center; color:#4F46E5; border-color:#4F46E5; background:#fff;" onclick="location.href='{% url 'attendance_select' %}'">
+                    <i class="ph ph-calendar-check"></i> Mark Attendance
+                </button>
+                <button class="action-btn" style="flex:1; padding:10px; justify-content:center; color:var(--text-main);" onclick="location.href='{% url 'attendance_select' %}'">
+                    View All <i class="ph ph-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 4: Study Material, Exams, School Updates -->
+    <div class="dashboard-panel col-1">
+        <div class="section-header">
+            <h3>Study Material</h3>
+            <a href="{% url 'material_list' %}" class="section-action">View All</a>
+        </div>
+        <div class="panel-content">
+            {% for mat in recent_materials %}
+            <div class="list-item">
+                <div class="item-icon" style="background: #FEE2E2; color: #EF4444;">
+                    <i class="ph ph-file-pdf"></i>
+                </div>
+                <div class="item-content">
+                    <h4>{{ mat.subject.name }} - {{ mat.class_assigned.name }}</h4>
+                    <p>{{ mat.title }}<br>Uploaded on {{ mat.uploaded_at|date:"d M Y" }}</p>
+                </div>
+                <a href="{{ mat.file.url }}" download style="color:#3B82F6;"><i class="ph ph-download-simple" style="font-size:20px;"></i></a>
+            </div>
+            {% empty %}
+            <p style="color:var(--text-muted); text-align:center;">No recent study materials.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="dashboard-panel col-2">
+        <div class="section-header">
+            <h3>Examination & Results</h3>
+            <a href="{% url 'examinations' %}" class="section-action">View All</a>
+        </div>
+        <div class="panel-content">
+            {% for exam in recent_exams %}
+            <div class="list-item">
+                <div class="item-icon" style="background: #DBEAFE; color: #3B82F6;">
+                    <i class="ph ph-clipboard-text"></i>
+                </div>
+                <div class="item-content">
+                    <h4>{{ exam.title }} - {{ exam.class_assigned.name }}</h4>
+                    <p>Conducted on {{ exam.date|date:"d M Y" }}</p>
+                </div>
+                <button class="item-action" style="background:#F3F4F6; color:#4F46E5; border:1px solid #E0E7FF;" onclick="location.href='{% url 'results' %}'">View Results</button>
+            </div>
+            {% empty %}
+            <p style="color:var(--text-muted); text-align:center;">No recent examinations.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="dashboard-panel col-3">
+        <div class="section-header">
+            <h3>School Updates & Reminders</h3>
+            <a href="{% url 'school_updates' %}" class="section-action">View All</a>
+        </div>
+        <div class="panel-content">
+            {% for update in school_updates %}
+            <div class="list-item">
+                <div class="item-icon" style="background: #DCFCE7; color: #16A34A; border-radius:50%; width:32px; height:32px; font-size:16px;">
+                    <i class="ph ph-play"></i>
+                </div>
+                <div class="item-content">
+                    <h4>{{ update.title }}</h4>
+                    <p>{{ update.date|date:"l, d M Y, h:i A" }}</p>
+                </div>
+            </div>
+            {% empty %}
+            <p style="color:var(--text-muted); text-align:center;">No school updates.</p>
+            {% endfor %}
+        </div>
+    </div>
+
 </div>
 {% endblock %}

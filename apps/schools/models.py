@@ -23,3 +23,12 @@ class School(models.Model):
 
     def __str__(self):
         return self.name
+
+class SchoolUpdate(models.Model):
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='updates')
+    
+    def __str__(self):
+        return self.title
