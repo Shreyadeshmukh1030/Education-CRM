@@ -349,89 +349,55 @@
                 <li>
                     <a href="{% url 'teacher_list' %}" class="{% if '/teachers/' in request.path %}active{% endif %}">
                         <span class="sidebar-icon"><i class="ph ph-chalkboard-teacher"></i></span>
-                    <a href="{% url 'dashboard' %}" class="{% if request.path == '/' %}active{% endif %}" style="{% if request.path == '/' %}background: var(--admin-primary, #3B82F6); color: #fff;{% endif %}">
-                        <span class="sidebar-icon"><i class="ph ph-house"></i></span>
-                        <span>Dashboard</span>
+                        <span>Teachers</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
-                        <span class="sidebar-icon"><i class="ph ph-user"></i></span>
-                        <span>CRM</span>
+                    <a href="{% url 'parent_list' %}" class="{% if '/parents/' in request.path %}active{% endif %}">
+                        <span class="sidebar-icon"><i class="ph ph-users-three"></i></span>
+                        <span>Parents</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
-                        <span class="sidebar-icon"><i class="ph ph-users"></i></span>
-                        <span>People</span>
-                        <i class="ph ph-caret-down" style="margin-left:auto;"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
+                    <a href="{% url 'class_list' %}" class="{% if '/classes/' in request.path %}active{% endif %}">
                         <span class="sidebar-icon"><i class="ph ph-graduation-cap"></i></span>
-                        <span>Academics</span>
-                        <i class="ph ph-caret-down" style="margin-left:auto;"></i>
+                        <span>Classes & Subjects</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="{% url 'attendance_select' %}">
                         <span class="sidebar-icon"><i class="ph ph-check-circle"></i></span>
                         <span>Attendance</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="{% url 'examinations' %}">
                         <span class="sidebar-icon"><i class="ph ph-file-text"></i></span>
                         <span>Examinations</span>
-                        <i class="ph ph-caret-down" style="margin-left:auto;"></i>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="{% url 'fees' %}">
                         <span class="sidebar-icon"><i class="ph ph-currency-inr"></i></span>
                         <span>Finance</span>
-                        <i class="ph ph-caret-down" style="margin-left:auto;"></i>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="{% url 'announcements' %}">
                         <span class="sidebar-icon"><i class="ph ph-chat-circle"></i></span>
                         <span>Communication</span>
-                        <i class="ph ph-caret-down" style="margin-left:auto;"></i>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="{% url 'school_updates' %}">
                         <span class="sidebar-icon"><i class="ph ph-folder"></i></span>
                         <span>School Content</span>
-                        <i class="ph ph-caret-down" style="margin-left:auto;"></i>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
-                        <span class="sidebar-icon"><i class="ph ph-chart-bar"></i></span>
-                        <span>Reports</span>
-                        <i class="ph ph-caret-down" style="margin-left:auto;"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="sidebar-icon"><i class="ph ph-file-pdf"></i></span>
-                        <span>Documents</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="sidebar-icon"><i class="ph ph-calendar"></i></span>
-                        <span>Calendar</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
+                    <a href="{% url 'my_settings' %}">
                         <span class="sidebar-icon"><i class="ph ph-gear"></i></span>
                         <span>Settings</span>
-                        <i class="ph ph-caret-down" style="margin-left:auto;"></i>
                     </a>
                 </li>
                 <div style="margin-top: 24px; padding: 16px; background: rgba(255,255,255,0.05); border-radius: 12px; text-align: center; margin-bottom: 20px;">

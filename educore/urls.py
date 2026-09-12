@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
-from apps.accounts.views import dashboard_view
+from apps.accounts.views import dashboard_view, landing_page_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -44,5 +44,6 @@ urlpatterns = [
     path('my-profile/', auth_views.TemplateView.as_view(template_name='pages/under_construction.html'), name='my_profile'),
     path('my-settings/', auth_views.TemplateView.as_view(template_name='pages/under_construction.html'), name='my_settings'),
     
-    path('', dashboard_view, name='dashboard'),
+    path('dashboard/', dashboard_view, name='dashboard'),
+    path('', landing_page_view, name='landing'),
 ]

@@ -48,8 +48,8 @@
                     </td>
                     <td style="padding: 15px 20px;">{{ teacher.joining_date|default:"-" }}</td>
                     <td style="padding: 15px 20px; text-align: right;">
-                        <a href="#" style="color: var(--text-muted); margin-right: 10px; transition: color var(--transition-fast);" onmouseover="this.style.color='var(--primary-color)'" onmouseout="this.style.color='var(--text-muted)'"><i class="ph ph-pencil-simple" style="font-size: 1.2rem;"></i></a>
-                        <a href="#" style="color: var(--text-muted); transition: color var(--transition-fast);" onmouseover="this.style.color='var(--danger-color)'" onmouseout="this.style.color='var(--text-muted)'"><i class="ph ph-trash" style="font-size: 1.2rem;"></i></a>
+                        <a href="{% url 'teacher_edit' teacher.pk %}" style="color: var(--text-muted); margin-right: 10px; transition: color var(--transition-fast);" onmouseover="this.style.color='var(--primary-color)'" onmouseout="this.style.color='var(--text-muted)'"><i class="ph ph-pencil-simple" style="font-size: 1.2rem;"></i></a>
+                        <a href="{% url 'teacher_delete' teacher.pk %}" style="color: var(--text-muted); transition: color var(--transition-fast);" onmouseover="this.style.color='var(--danger-color)'" onmouseout="this.style.color='var(--text-muted)'"><i class="ph ph-trash" style="font-size: 1.2rem;"></i></a>
                     </td>
                 </tr>
                 {% empty %}
