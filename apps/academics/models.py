@@ -125,3 +125,15 @@ class Exam(models.Model):
     
     def __str__(self):
         return f"{self.title} - {self.class_assigned.name}"
+
+class ExamResult(models.Model):
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE, related_name='results')
+    student = models.ForeignKey('students.StudentProfile', on_delete=models.CASCADE, related_name='exam_results')
+    marks_obtained = models.DecimalField(max_digits=5, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ('exam', 'student')
+    
+    def __str__(self):
+        return f"{self.student.user.first_name} - {self.exam.title}"

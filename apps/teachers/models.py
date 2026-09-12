@@ -11,7 +11,8 @@ class TeacherProfile(models.Model):
     joining_date = models.DateField(null=True, blank=True)
     
     # We will add ManyToMany for subjects and classes later when Subject model is created
-    
+    classes = models.ManyToManyField('academics.Class', related_name='assigned_teachers', blank=True)
+    subjects = models.ManyToManyField('academics.Subject', related_name='assigned_teachers', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
