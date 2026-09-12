@@ -114,6 +114,224 @@
                     </a>
                 </li>
 
+            {% elif request.user.role.name == 'Student' %}
+                <!-- STUDENT SIDEBAR -->
+                <li>
+                    <a href="{% url 'dashboard' %}" class="{% if request.path == '/' %}active{% endif %}" style="{% if request.path == '/' %}background: var(--student-primary, #3B82F6); color: #fff;{% endif %}">
+                        <span class="sidebar-icon"><i class="ph ph-house"></i></span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-user"></i></span>
+                        <span>My Profile</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-books"></i></span>
+                        <span>My Class</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-check-circle"></i></span>
+                        <span>Attendance</span>
+                    </a>
+                </li>
+                <!-- Academics Dropdown Placeholder -->
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-graduation-cap"></i></span>
+                        <span>Academics</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-calendar-blank"></i></span>
+                        <span>Timetable</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-currency-inr"></i></span>
+                        <span>Fees</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'announcements' %}">
+                        <span class="sidebar-icon"><i class="ph ph-megaphone"></i></span>
+                        <span>Announcements</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'school_updates' %}">
+                        <span class="sidebar-icon"><i class="ph ph-broadcast"></i></span>
+                        <span>School Updates</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-calendar-star"></i></span>
+                        <span>Events</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-bell"></i></span>
+                        <span>Notifications</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-file-pdf"></i></span>
+                        <span>Documents</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-calendar"></i></span>
+                        <span>Calendar</span>
+                    </a>
+                </li>
+
+            {% elif 'parent' in request.user.role.name|lower %}
+                <!-- PARENT SIDEBAR -->
+                <li>
+                    <a href="{% url 'dashboard' %}" class="{% if request.path == '/' %}active{% endif %}" style="{% if request.path == '/' %}background: var(--parent-primary, #3B82F6); color: #fff;{% endif %}">
+                        <span class="sidebar-icon"><i class="ph ph-house"></i></span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-user"></i></span>
+                        <span>My Children</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-calendar-check"></i></span>
+                        <span>Attendance</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-graduation-cap"></i></span>
+                        <span>Academics</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-clipboard-text"></i></span>
+                        <span>Assignments</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-book-open"></i></span>
+                        <span>Study Material</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-file-text"></i></span>
+                        <span>Examinations</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-chart-bar"></i></span>
+                        <span>Results</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-file-pdf"></i></span>
+                        <span>Report Cards</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-calendar-blank"></i></span>
+                        <span>Timetable</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-currency-inr"></i></span>
+                        <span>Fees</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-credit-card"></i></span>
+                        <span>Payments</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-bell"></i></span>
+                        <span>Notifications</span>
+                        <span style="margin-left:auto; background:#EF4444; color:#fff; font-size:10px; padding:2px 6px; border-radius:10px; font-weight:700;">3</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-megaphone"></i></span>
+                        <span>Announcements</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-chalkboard-teacher"></i></span>
+                        <span>Teacher Suggestions</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-buildings"></i></span>
+                        <span>School Updates</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-calendar-star"></i></span>
+                        <span>Events</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-folder"></i></span>
+                        <span>Documents</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-hand-pointing"></i></span>
+                        <span>Requests</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-calendar"></i></span>
+                        <span>Calendar</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-user-circle"></i></span>
+                        <span>Profile</span>
+                    </a>
+                </li>
+                <div style="margin-top: 24px; padding: 16px; background: rgba(255,255,255,0.05); border-radius: 12px; text-align: center; margin-bottom: 20px;">
+                    <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom: 8px;">
+                        <i class="ph ph-leaf" style="font-size: 24px; color: #9CA3AF;"></i>
+                    </div>
+                    <p style="font-size: 0.8rem; color: #D1D5DB; margin: 0; line-height: 1.4;">Together for a<br>Brighter Future</p>
+                </div>
+
             {% else %}
                 <!-- DEFAULT ADMIN SIDEBAR -->
                 <li>
@@ -131,51 +349,95 @@
                 <li>
                     <a href="{% url 'teacher_list' %}" class="{% if '/teachers/' in request.path %}active{% endif %}">
                         <span class="sidebar-icon"><i class="ph ph-chalkboard-teacher"></i></span>
-                        <span>Teachers</span>
+                    <a href="{% url 'dashboard' %}" class="{% if request.path == '/' %}active{% endif %}" style="{% if request.path == '/' %}background: var(--admin-primary, #3B82F6); color: #fff;{% endif %}">
+                        <span class="sidebar-icon"><i class="ph ph-house"></i></span>
+                        <span>Dashboard</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'parent_list' %}" class="{% if '/parents/' in request.path %}active{% endif %}">
-                        <span class="sidebar-icon"><i class="ph ph-users-three"></i></span>
-                        <span>Parents</span>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-user"></i></span>
+                        <span>CRM</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'class_list' %}" class="{% if '/classes/' in request.path %}active{% endif %}">
-                        <span class="sidebar-icon"><i class="ph ph-books"></i></span>
-                        <span>Classes</span>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-users"></i></span>
+                        <span>People</span>
+                        <i class="ph ph-caret-down" style="margin-left:auto;"></i>
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'attendance_select' %}" class="{% if '/attendance/' in request.path %}active{% endif %}">
-                        <span class="sidebar-icon"><i class="ph ph-calendar-check"></i></span>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-graduation-cap"></i></span>
+                        <span>Academics</span>
+                        <i class="ph ph-caret-down" style="margin-left:auto;"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-check-circle"></i></span>
                         <span>Attendance</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'timetable_view' %}" class="{% if '/timetable/' in request.path %}active{% endif %}">
-                        <span class="sidebar-icon"><i class="ph ph-clock"></i></span>
-                        <span>Timetable</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'assignment_list' %}" class="{% if '/assignments/' in request.path %}active{% endif %}">
-                        <span class="sidebar-icon"><i class="ph ph-clipboard-text"></i></span>
-                        <span>Assignments</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'material_list' %}" class="{% if '/materials/' in request.path %}active{% endif %}">
+                    <a href="#">
                         <span class="sidebar-icon"><i class="ph ph-file-text"></i></span>
-                        <span>Study Materials</span>
+                        <span>Examinations</span>
+                        <i class="ph ph-caret-down" style="margin-left:auto;"></i>
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'school_settings' %}" class="{% if '/school/' in request.path %}active{% endif %}">
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-currency-inr"></i></span>
+                        <span>Finance</span>
+                        <i class="ph ph-caret-down" style="margin-left:auto;"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-chat-circle"></i></span>
+                        <span>Communication</span>
+                        <i class="ph ph-caret-down" style="margin-left:auto;"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-folder"></i></span>
+                        <span>School Content</span>
+                        <i class="ph ph-caret-down" style="margin-left:auto;"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-chart-bar"></i></span>
+                        <span>Reports</span>
+                        <i class="ph ph-caret-down" style="margin-left:auto;"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-file-pdf"></i></span>
+                        <span>Documents</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="ph ph-calendar"></i></span>
+                        <span>Calendar</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
                         <span class="sidebar-icon"><i class="ph ph-gear"></i></span>
                         <span>Settings</span>
+                        <i class="ph ph-caret-down" style="margin-left:auto;"></i>
                     </a>
                 </li>
+                <div style="margin-top: 24px; padding: 16px; background: rgba(255,255,255,0.05); border-radius: 12px; text-align: center; margin-bottom: 20px;">
+                    <i class="ph ph-buildings" style="font-size: 32px; color: #9CA3AF; margin-bottom: 8px;"></i>
+                    <p style="font-size: 0.8rem; color: #D1D5DB; margin: 0; line-height: 1.4;">Building better futures, together.</p>
+                </div>
             {% endif %}
         </ul>
     </nav>

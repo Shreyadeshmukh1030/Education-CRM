@@ -1,125 +1,496 @@
 {% extends 'base/base.html' %}
+{% load static %}
 
-{% block title %}Admin Dashboard - EduCore CRM{% endblock %}
+{% block title %}Admin Dashboard | EduCore CRM{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
 
 {% block content %}
-<div class="dashboard-header animate-fade-in stagger-1">
-    <h1 style="font-size: 2.5rem; margin-bottom: 10px;">Welcome back, <span style="color: var(--primary-color);">{{ user.get_full_name|default:user.username }}</span> 👋</h1>
-    <p style="color: var(--text-muted); font-size: 1.1rem;">Here is what's happening at your school today.</p>
-</div>
-
-<div class="dashboard-stats">
-    <div class="stat-card animate-fade-in stagger-2">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <h3>Total Students</h3>
-            <div style="background: rgba(79, 70, 229, 0.1); padding: 10px; border-radius: 12px; color: var(--primary-color);">
-                <i class="ph ph-users" style="font-size: 24px;"></i>
-            </div>
-        </div>
-        <p>{{ total_students|default:"0" }}</p>
-        <div style="margin-top: 10px; font-size: 0.85rem; color: var(--success-color); display: flex; align-items: center; gap: 5px;">
-            <i class="ph ph-trend-up"></i>
-            <span>Updated dynamically</span>
-        </div>
-    </div>
-
-    <div class="stat-card animate-fade-in stagger-3">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <h3>Total Teachers</h3>
-            <div style="background: rgba(16, 185, 129, 0.1); padding: 10px; border-radius: 12px; color: var(--secondary-color);">
-                <i class="ph ph-chalkboard-teacher" style="font-size: 24px;"></i>
-            </div>
-        </div>
-        <p>{{ total_teachers|default:"0" }}</p>
-        <div style="margin-top: 10px; font-size: 0.85rem; color: var(--text-muted); display: flex; align-items: center; gap: 5px;">
-            <i class="ph ph-minus"></i>
-            <span>Updated dynamically</span>
-        </div>
-    </div>
-
-    <div class="stat-card animate-fade-in stagger-4">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <h3>Total Classes</h3>
-            <div style="background: rgba(245, 158, 11, 0.1); padding: 10px; border-radius: 12px; color: var(--warning-color);">
-                <i class="ph ph-books" style="font-size: 24px;"></i>
-            </div>
-        </div>
-        <p>{{ total_classes|default:"0" }}</p>
-        <div style="margin-top: 10px; font-size: 0.85rem; color: var(--success-color); display: flex; align-items: center; gap: 5px;">
-            <i class="ph ph-trend-up"></i>
-            <span>Updated dynamically</span>
-        </div>
-    </div>
-
-    <div class="stat-card animate-fade-in stagger-4">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <h3>Total Parents</h3>
-            <div style="background: rgba(59, 130, 246, 0.1); padding: 10px; border-radius: 12px; color: var(--info-color);">
-                <i class="ph ph-users-three" style="font-size: 24px;"></i>
-            </div>
-        </div>
-        <p>{{ total_parents|default:"0" }}</p>
-        <div style="margin-top: 10px; font-size: 0.85rem; color: var(--success-color); display: flex; align-items: center; gap: 5px;">
-            <i class="ph ph-trend-up"></i>
-            <span>Updated dynamically</span>
-        </div>
-    </div>
-</div>
-
-<div class="dashboard-sections" style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-top: 24px;">
-    <!-- Recent Activity -->
-    <div class="card animate-fade-in stagger-2">
-        <h3 style="margin-bottom: 20px; font-size: 1.25rem;">Recent Activity</h3>
-        <div style="display: flex; flex-direction: column; gap: 15px;">
-            <div style="display: flex; align-items: center; gap: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color);">
-                <div style="background: rgba(79, 70, 229, 0.1); padding: 10px; border-radius: 50%; color: var(--primary-color);">
-                    <i class="ph ph-user-plus"></i>
-                </div>
-                <div>
-                    <p style="font-weight: 500; margin-bottom: 2px;">New student enrolled</p>
-                    <p style="font-size: 0.85rem; color: var(--text-muted);">Sarah Jenkins joined Class 10-A</p>
-                </div>
-                <span style="margin-left: auto; font-size: 0.85rem; color: var(--text-muted);">2h ago</span>
-            </div>
-            
-            <div style="display: flex; align-items: center; gap: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color);">
-                <div style="background: rgba(16, 185, 129, 0.1); padding: 10px; border-radius: 50%; color: var(--secondary-color);">
-                    <i class="ph ph-check-circle"></i>
-                </div>
-                <div>
-                    <p style="font-weight: 500; margin-bottom: 2px;">Term fees updated</p>
-                    <p style="font-size: 0.85rem; color: var(--text-muted);">Fee structure updated for 2024</p>
-                </div>
-                <span style="margin-left: auto; font-size: 0.85rem; color: var(--text-muted);">5h ago</span>
-            </div>
-            
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <div style="background: rgba(245, 158, 11, 0.1); padding: 10px; border-radius: 50%; color: var(--warning-color);">
-                    <i class="ph ph-calendar"></i>
-                </div>
-                <div>
-                    <p style="font-weight: 500; margin-bottom: 2px;">Event Scheduled</p>
-                    <p style="font-size: 0.85rem; color: var(--text-muted);">Annual Sports Day scheduled for Dec 15</p>
-                </div>
-                <span style="margin-left: auto; font-size: 0.85rem; color: var(--text-muted);">1d ago</span>
-            </div>
-        </div>
-    </div>
+<div class="admin-dashboard">
     
-    <!-- Quick Actions -->
-    <div class="card animate-fade-in stagger-3">
-        <h3 style="margin-bottom: 20px; font-size: 1.25rem;">Quick Actions</h3>
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-            <a href="#" class="btn btn-primary" style="width: 100%; justify-content: flex-start; padding: 12px 16px;">
-                <i class="ph ph-plus-circle" style="margin-right: 10px; font-size: 1.2rem;"></i> Add New Student
-            </a>
-            <a href="#" class="btn btn-secondary" style="width: 100%; justify-content: flex-start; padding: 12px 16px;">
-                <i class="ph ph-envelope-simple" style="margin-right: 10px; font-size: 1.2rem;"></i> Send Notice
-            </a>
-            <a href="#" class="btn btn-secondary" style="width: 100%; justify-content: flex-start; padding: 12px 16px;">
-                <i class="ph ph-file-text" style="margin-right: 10px; font-size: 1.2rem;"></i> Generate Report
-            </a>
+    <!-- Welcome Header -->
+    <div class="dashboard-header">
+        <div>
+            <h1>Good Morning, {{ user.first_name }} {{ user.last_name }}!</h1>
+            <p>Here's what's happening at your school today.</p>
+        </div>
+        <div class="dashboard-date">
+            <i class="ph ph-calendar-blank" style="font-size: 20px;"></i>
+            {{ today|date:"D, d M Y" }}
         </div>
     </div>
+
+    <!-- Top Stats Row (Scrollable horizontally) -->
+    <div class="admin-stats-container">
+        
+        <div class="admin-stat-card">
+            <div class="stat-header">
+                <div class="stat-icon blue"><i class="ph ph-users"></i></div>
+                <div class="stat-title">Total Students</div>
+            </div>
+            <div class="stat-value">{{ total_students|default:1248 }}</div>
+            <div class="stat-trend up"><i class="ph ph-arrow-up"></i> 8% from last term</div>
+        </div>
+
+        <div class="admin-stat-card">
+            <div class="stat-header">
+                <div class="stat-icon green"><i class="ph ph-chalkboard-teacher"></i></div>
+                <div class="stat-title">Total Teachers</div>
+            </div>
+            <div class="stat-value">{{ total_teachers|default:86 }}</div>
+            <div class="stat-trend up"><i class="ph ph-arrow-up"></i> 5% from last term</div>
+        </div>
+
+        <div class="admin-stat-card">
+            <div class="stat-header">
+                <div class="stat-icon purple"><i class="ph ph-users-three"></i></div>
+                <div class="stat-title">Total Parents</div>
+            </div>
+            <div class="stat-value">{{ total_parents|default:1102 }}</div>
+            <div class="stat-trend up"><i class="ph ph-arrow-up"></i> 7% from last term</div>
+        </div>
+
+        <div class="admin-stat-card">
+            <div class="stat-header">
+                <div class="stat-icon yellow"><i class="ph ph-presentation-chart"></i></div>
+                <div class="stat-title">Total Classes</div>
+            </div>
+            <div class="stat-value">{{ total_classes|default:12 }}</div>
+            <div class="stat-trend neutral">Sections: {{ total_sections|default:36 }}</div>
+        </div>
+
+        <div class="admin-stat-card">
+            <div class="stat-header">
+                <div class="stat-icon teal"><i class="ph ph-calendar-check"></i></div>
+                <div class="stat-title">Today's Attendance</div>
+            </div>
+            <div class="stat-value">{{ attendance_percentage }}%</div>
+            <div class="stat-trend up"><i class="ph ph-arrow-up"></i> {{ total_present }} / {{ total_marked }} present</div>
+        </div>
+
+        <div class="admin-stat-card">
+            <div class="stat-header">
+                <div class="stat-icon pink"><i class="ph ph-currency-inr"></i></div>
+                <div class="stat-title">Pending Fees</div>
+            </div>
+            <div class="stat-value">₹ {{ total_pending_fees|floatformat:0 }}</div>
+            <div class="stat-trend neutral">{{ students_with_pending_fees }} students</div>
+        </div>
+
+        <div class="admin-stat-card">
+            <div class="stat-header">
+                <div class="stat-icon green"><i class="ph ph-user-plus"></i></div>
+                <div class="stat-title">New Admissions</div>
+            </div>
+            <div class="stat-value">{{ new_admissions }}</div>
+            <div class="stat-trend up"><i class="ph ph-arrow-up"></i> 25% from last month</div>
+        </div>
+        
+    </div>
+
+    <!-- Row 2: Growth Chart, Attendance Chart, Announcements -->
+    <div class="admin-grid grid-row-2">
+        <div class="admin-panel">
+            <div class="panel-header">
+                <h3><i class="ph ph-chart-line-up"></i> Student Growth</h3>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">Last 6 Months <i class="ph ph-caret-down"></i></span>
+            </div>
+            <div class="chart-container">
+                <canvas id="growthChart"></canvas>
+            </div>
+        </div>
+
+        <div class="admin-panel">
+            <div class="panel-header">
+                <h3><i class="ph ph-sun"></i> Attendance Trend</h3>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">Last 7 Days <i class="ph ph-caret-down"></i></span>
+            </div>
+            <div class="chart-container">
+                <canvas id="attendanceTrendChart"></canvas>
+            </div>
+        </div>
+
+        <div class="admin-panel">
+            <div class="panel-header">
+                <h3><i class="ph ph-megaphone"></i> Recent Announcements</h3>
+                <a href="#" class="panel-action">This Month <i class="ph ph-caret-down"></i></a>
+            </div>
+            <div style="flex:1; overflow-y:auto; max-height: 250px;">
+                <div class="list-item">
+                    <div class="list-icon" style="background: #F5F3FF; color: #8B5CF6;"><i class="ph ph-users"></i></div>
+                    <div class="list-content">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                            <h4>Parent-Teacher Meeting</h4>
+                            <span class="alert-badge blue" style="background:#EFF6FF; color:#3B82F6;">General</span>
+                        </div>
+                        <p>PTM will be held on 26th April 2025.</p>
+                        <div class="list-date">22 Apr 2025</div>
+                    </div>
+                </div>
+                <div class="list-item">
+                    <div class="list-icon" style="background: #FEF2F2; color: #EF4444;"><i class="ph ph-calendar-star"></i></div>
+                    <div class="list-content">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                            <h4>Annual Day Celebration</h4>
+                            <span class="alert-badge" style="background:#ECFDF5; color:#10B981;">Event</span>
+                        </div>
+                        <p>Annual Day will be on 15th May 2025.</p>
+                        <div class="list-date">20 Apr 2025</div>
+                    </div>
+                </div>
+                <div class="list-item">
+                    <div class="list-icon" style="background: #FEF3C7; color: #F59E0B;"><i class="ph ph-book-open"></i></div>
+                    <div class="list-content">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                            <h4>New Study Material Added</h4>
+                            <span class="alert-badge" style="background:#F5F3FF; color:#8B5CF6;">Material</span>
+                        </div>
+                        <p>Chapter 5 - Fractions (Maths) is now available.</p>
+                        <div class="list-date">18 Apr 2025</div>
+                    </div>
+                </div>
+                <div class="list-item">
+                    <div class="list-icon" style="background: #EFF6FF; color: #3B82F6;"><i class="ph ph-bell"></i></div>
+                    <div class="list-content">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                            <h4>School Holiday</h4>
+                            <span class="alert-badge" style="background:#FEF2F2; color:#EF4444;">Notice</span>
+                        </div>
+                        <p>School will remain closed on 25th April 2025.</p>
+                        <div class="list-date">16 Apr 2025</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 3: Schedule, Quick Actions -->
+    <div class="admin-grid grid-row-3">
+        <div class="admin-panel">
+            <div class="panel-header">
+                <h3><i class="ph ph-calendar-blank"></i> Today's Schedule</h3>
+                <a href="#" class="panel-action">View Full Schedule <i class="ph ph-arrow-right"></i></a>
+            </div>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Class</th>
+                        <th>Subject</th>
+                        <th>Teacher</th>
+                        <th>Room</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sched in todays_schedule %}
+                    <tr>
+                        <td>{{ sched.period.start_time|time:"H:i" }} - {{ sched.period.end_time|time:"H:i" }}</td>
+                        <td>{{ sched.class_assigned.name }}</td>
+                        <td>
+                            <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#3B82F6;margin-right:6px;"></span>
+                            {{ sched.subject.name }}
+                        </td>
+                        <td>{{ sched.teacher.user.get_full_name }}</td>
+                        <td>10{{ forloop.counter }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td>08:00 - 08:45</td>
+                        <td>Class 5A</td>
+                        <td><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#3B82F6;margin-right:6px;"></span> Mathematics</td>
+                        <td>Mr. Rajesh Kumar</td>
+                        <td>101</td>
+                    </tr>
+                    <tr>
+                        <td>09:00 - 09:45</td>
+                        <td>Class 6B</td>
+                        <td><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#10B981;margin-right:6px;"></span> English</td>
+                        <td>Ms. Neha Verma</td>
+                        <td>102</td>
+                    </tr>
+                    <tr>
+                        <td>10:00 - 10:45</td>
+                        <td>Class 7A</td>
+                        <td><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#F59E0B;margin-right:6px;"></span> Science</td>
+                        <td>Mr. Amit Singh</td>
+                        <td>Lab 1</td>
+                    </tr>
+                    <tr>
+                        <td>11:00 - 11:45</td>
+                        <td>Class 8B</td>
+                        <td><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#F97316;margin-right:6px;"></span> Social Studies</td>
+                        <td>Ms. Pooja Sharma</td>
+                        <td>103</td>
+                    </tr>
+                    <tr>
+                        <td>12:00 - 12:45</td>
+                        <td>Class 9A</td>
+                        <td><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#06B6D4;margin-right:6px;"></span> Computer</td>
+                        <td>Mr. Sandeep Yadav</td>
+                        <td>Computer Lab</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="admin-panel">
+            <div class="panel-header">
+                <h3><i class="ph ph-lightning"></i> Quick Actions</h3>
+            </div>
+            <div class="quick-actions-grid">
+                <button class="action-btn"><i class="ph ph-user" style="color: #3B82F6;"></i> Add Student</button>
+                <button class="action-btn"><i class="ph ph-users" style="color: #10B981;"></i> Add Teacher</button>
+                <button class="action-btn"><i class="ph ph-user-plus" style="color: #EC4899;"></i> Add Parent</button>
+                <button class="action-btn"><i class="ph ph-file-text" style="color: #8B5CF6;"></i> Create Exam</button>
+                <button class="action-btn"><i class="ph ph-megaphone" style="color: #F59E0B;"></i> Announcement</button>
+                <button class="action-btn"><i class="ph ph-calendar-plus" style="color: #14B8A6;"></i> Add Event</button>
+                <button class="action-btn"><i class="ph ph-chart-bar" style="color: #3B82F6;"></i> Generate Report</button>
+                <button class="action-btn"><i class="ph ph-currency-inr" style="color: #EF4444;"></i> Manage Fees</button>
+                <button class="action-btn"><i class="ph ph-calendar-blank" style="color: #8B5CF6;"></i> View Calendar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 4: Classes, Results, Updates, Alerts -->
+    <div class="admin-grid grid-row-4">
+        
+        <div class="admin-panel">
+            <div class="panel-header">
+                <h3><i class="ph ph-calendar"></i> Upcoming Classes</h3>
+                <a href="#" class="panel-action">View All <i class="ph ph-arrow-right"></i></a>
+            </div>
+            <div style="flex:1; overflow-y:auto; max-height:220px;">
+                {% for i in "12345" %}
+                <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F3F4F6;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <div class="list-icon" style="width:24px;height:24px;background:#EFF6FF;color:#3B82F6;font-size:12px;">C</div>
+                        <div>
+                            <div style="font-size:0.75rem; color:var(--text-muted);">08:00 AM - 08:45 AM</div>
+                            <div style="font-size:0.8rem; font-weight:600; color:var(--text-dark);">Class 5A <span style="font-weight:400;color:var(--text-muted);">- Maths</span></div>
+                        </div>
+                    </div>
+                    <button style="background:#3B82F6; color:#fff; border:none; padding:4px 8px; border-radius:4px; font-size:0.7rem; cursor:pointer;">Start Class</button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="admin-panel">
+            <div class="panel-header">
+                <h3><i class="ph ph-trophy"></i> Recent Results</h3>
+                <a href="#" class="panel-action">View All <i class="ph ph-arrow-right"></i></a>
+            </div>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Exam</th>
+                        <th>Class</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Unit Test - 1</td><td>Class 5</td><td>18 Apr 2025</td><td><a href="#" style="color:#3B82F6;font-size:0.75rem;">View</a></td></tr>
+                    <tr><td>Unit Test - 1</td><td>Class 6</td><td>18 Apr 2025</td><td><a href="#" style="color:#3B82F6;font-size:0.75rem;">View</a></td></tr>
+                    <tr><td>Unit Test - 1</td><td>Class 7</td><td>18 Apr 2025</td><td><a href="#" style="color:#3B82F6;font-size:0.75rem;">View</a></td></tr>
+                    <tr><td>Mid Term Exam</td><td>Class 7</td><td>15 Apr 2025</td><td><a href="#" style="color:#3B82F6;font-size:0.75rem;">View</a></td></tr>
+                    <tr><td>Unit Test - 1</td><td>Class 8</td><td>12 Apr 2025</td><td><a href="#" style="color:#3B82F6;font-size:0.75rem;">View</a></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="admin-panel">
+            <div class="panel-header">
+                <h3><i class="ph ph-image"></i> Updates & Gallery</h3>
+                <a href="#" class="panel-action">View All <i class="ph ph-arrow-right"></i></a>
+            </div>
+            <div style="flex:1; overflow-y:auto; max-height:220px;">
+                <div class="list-item" style="padding: 6px 0;">
+                    <img src="https://images.unsplash.com/photo-1544928147-79a2dbc1f389?w=60&h=60&q=80" style="width:40px;height:40px;border-radius:8px;object-fit:cover;">
+                    <div class="list-content">
+                        <h4 style="font-size:0.8rem;">Annual Sports Day</h4>
+                        <p style="font-size:0.7rem; margin-bottom:0;">Photos from Sports Day 2025</p>
+                    </div>
+                </div>
+                <div class="list-item" style="padding: 6px 0;">
+                    <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?w=60&h=60&q=80" style="width:40px;height:40px;border-radius:8px;object-fit:cover;">
+                    <div class="list-content">
+                        <h4 style="font-size:0.8rem;">Science Exhibition</h4>
+                        <p style="font-size:0.7rem; margin-bottom:0;">Students showcase projects</p>
+                    </div>
+                </div>
+                <div class="list-item" style="padding: 6px 0;">
+                    <img src="https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=60&h=60&q=80" style="width:40px;height:40px;border-radius:8px;object-fit:cover;">
+                    <div class="list-content">
+                        <h4 style="font-size:0.8rem;">Cultural Fest</h4>
+                        <p style="font-size:0.7rem; margin-bottom:0;">Highlights from Fest</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-panel" style="background: #F9FAFB;">
+            <div class="panel-header">
+                <h3><i class="ph ph-warning-circle"></i> Important Alerts</h3>
+                <a href="#" class="panel-action">View All <i class="ph ph-arrow-right"></i></a>
+            </div>
+            <div style="flex:1; overflow-y:auto; max-height:220px;">
+                <div class="list-item" style="padding: 8px 0;">
+                    <div class="list-icon" style="background: #FEF2F2; color: #EF4444; width:24px; height:24px; font-size:12px;"><i class="ph ph-warning"></i></div>
+                    <div class="list-content">
+                        <h4 style="font-size:0.8rem; color: #EF4444;">3 students low attendance</h4>
+                        <p style="font-size:0.7rem; margin-bottom:0;">Below 75% this month</p>
+                    </div>
+                </div>
+                <div class="list-item" style="padding: 8px 0;">
+                    <div class="list-icon" style="background: #FEF2F2; color: #EF4444; width:24px; height:24px; font-size:12px;"><i class="ph ph-currency-inr"></i></div>
+                    <div class="list-content">
+                        <h4 style="font-size:0.8rem; color: #EF4444;">7 fee payments overdue</h4>
+                        <p style="font-size:0.7rem; margin-bottom:0;">Follow up with parents</p>
+                    </div>
+                </div>
+                <div class="list-item" style="padding: 8px 0;">
+                    <div class="list-icon" style="background: #FEF3C7; color: #F59E0B; width:24px; height:24px; font-size:12px;"><i class="ph ph-file-text"></i></div>
+                    <div class="list-content">
+                        <h4 style="font-size:0.8rem;">2 upcoming exams</h4>
+                        <p style="font-size:0.7rem; margin-bottom:0;">Unit Test - Class 5 & 8</p>
+                    </div>
+                </div>
+                <div class="list-item" style="padding: 8px 0;">
+                    <div class="list-icon" style="background: #F5F3FF; color: #8B5CF6; width:24px; height:24px; font-size:12px;"><i class="ph ph-user-plus"></i></div>
+                    <div class="list-content">
+                        <h4 style="font-size:0.8rem;">5 new applications</h4>
+                        <p style="font-size:0.7rem; margin-bottom:0;">Require document verification</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        // Growth Chart (Bar)
+        const ctxGrowth = document.getElementById('growthChart').getContext('2d');
+        const growthLabels = {{ growth_labels|safe }};
+        const growthStudents = {{ growth_students|safe }};
+        const growthAdmissions = {{ growth_admissions|safe }};
+        
+        new Chart(ctxGrowth, {
+            type: 'bar',
+            data: {
+                labels: growthLabels,
+                datasets: [
+                    {
+                        label: 'Total Students',
+                        data: growthStudents,
+                        backgroundColor: '#3B82F6',
+                        borderRadius: 4,
+                        barPercentage: 0.7,
+                        categoryPercentage: 0.8
+                    },
+                    {
+                        label: 'New Admissions',
+                        data: growthAdmissions,
+                        backgroundColor: '#10B981',
+                        borderRadius: 4,
+                        barPercentage: 0.7,
+                        categoryPercentage: 0.8
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        align: 'end',
+                        labels: { boxWidth: 10, usePointStyle: true, font: {size: 11} }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { borderDash: [4, 4], color: '#E5E7EB' },
+                        ticks: { color: '#6B7280', font: {size: 11} }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#6B7280', font: {size: 11} }
+                    }
+                }
+            }
+        });
+
+        // Attendance Trend Chart (Line)
+        const ctxTrend = document.getElementById('attendanceTrendChart').getContext('2d');
+        const trendLabels = {{ trend_labels|safe }};
+        const trendPresent = {{ trend_present|safe }};
+        const trendAbsent = {{ trend_absent|safe }};
+
+        new Chart(ctxTrend, {
+            type: 'line',
+            data: {
+                labels: trendLabels,
+                datasets: [
+                    {
+                        label: 'Present',
+                        data: trendPresent,
+                        borderColor: '#10B981',
+                        backgroundColor: '#10B981',
+                        tension: 0.4,
+                        borderWidth: 2,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#10B981'
+                    },
+                    {
+                        label: 'Absent',
+                        data: trendAbsent,
+                        borderColor: '#EF4444',
+                        backgroundColor: '#EF4444',
+                        tension: 0.4,
+                        borderWidth: 2,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#EF4444'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        align: 'end',
+                        labels: { boxWidth: 10, usePointStyle: true, font: {size: 11} }
+                    }
+                },
+                scales: {
+                    y: {
+                        min: 70,
+                        max: 100,
+                        grid: { borderDash: [4, 4], color: '#E5E7EB' },
+                        ticks: {
+                            callback: function(value) { return value + '%'; },
+                            color: '#6B7280', font: {size: 11}
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#6B7280', font: {size: 11} }
+                    }
+                }
+            }
+        });
+
+    });
+</script>
 {% endblock %}

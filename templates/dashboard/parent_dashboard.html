@@ -1,13 +1,478 @@
 {% extends 'base/base.html' %}
+{% load static %}
+
 {% block title %}Parent Dashboard | EduCore CRM{% endblock %}
-{% block page_title %}Parent Dashboard{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/parent_dashboard.css' %}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
 
 {% block content %}
-<div class="dashboard-stats">
-    <div class="card" style="grid-column: 1 / -1; text-align: center; padding: 40px;">
-        <i class="ph ph-users-three" style="font-size: 64px; color: var(--primary-color);"></i>
-        <h2>Welcome to the Parent Portal!</h2>
-        <p style="color: var(--text-muted);">The advanced parent view is currently under construction (Phase 3).</p>
+<div class="parent-dashboard">
+    
+    <!-- Header -->
+    <div class="dashboard-header">
+        <div>
+            <h1>Good Morning, {{ user.first_name }} {{ user.last_name }}!</h1>
+            <p>Here's a quick look at your child's progress and school updates.</p>
+        </div>
+        
+        <div style="display:flex; gap:16px; align-items:center;">
+            <!-- Child Selector -->
+            <div class="child-selector" onclick="toggleDropdown()">
+                {% if selected_child.profile_picture %}
+                    <img src="{{ selected_child.profile_picture.url }}" alt="{{ selected_child.user.first_name }}">
+                {% else %}
+                    <img src="https://ui-avatars.com/api/?name={{ selected_child.user.first_name }}+{{ selected_child.user.last_name }}&background=E5E7EB&color=3B82F6" alt="Avatar">
+                {% endif %}
+                <div class="child-selector-info">
+                    <strong>{{ selected_child.user.first_name }} {{ selected_child.user.last_name }}</strong>
+                    <span>{{ selected_child.current_class.name }} | Roll No. {{ selected_child.roll_number|default:"12" }}</span>
+                </div>
+                <i class="ph ph-caret-down" style="color:var(--parent-primary);"></i>
+                
+                <!-- Simple dropdown logic (could be improved with JS) -->
+                <div id="childDropdown" style="display:none; position:absolute; top:75px; background:#fff; border:1px solid #e5e7eb; border-radius:8px; padding:8px; z-index:100; box-shadow:0 4px 6px -1px rgba(0,0,0,0.1);">
+                    {% for child in children %}
+                    <a href="?child_id={{ child.id }}" style="display:block; padding:8px 12px; text-decoration:none; color:#1F2937; border-radius:4px; font-size:0.85rem;" onmouseover="this.style.background='#F3F4F6'" onmouseout="this.style.background='transparent'">
+                        {{ child.user.first_name }} {{ child.user.last_name }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="dashboard-date">
+                <i class="ph ph-calendar-blank" style="font-size: 20px;"></i>
+                {{ today|date:"D, d M Y" }}
+            </div>
+        </div>
     </div>
+
+    <!-- Top Stats -->
+    <div class="parent-stats-container">
+        <div class="parent-stat-card">
+            <div class="stat-icon green"><i class="ph ph-buildings"></i></div>
+            <div class="stat-content">
+                <h3>Attendance</h3>
+                <div class="stat-value">{{ attendance_percentage }}%</div>
+                <p>{{ total_present }} / {{ total_marked }} classes</p>
+                <div class="stat-trend up"><i class="ph ph-arrow-up"></i> 5% from last month</div>
+            </div>
+        </div>
+        
+        <div class="parent-stat-card">
+            <div class="stat-icon green"><i class="ph ph-graduation-cap"></i></div>
+            <div class="stat-content">
+                <h3>Overall Academics</h3>
+                <div class="stat-value">{{ avg_score }}%</div>
+                <p>Good Performance</p>
+                <div class="stat-trend up"><i class="ph ph-arrow-up"></i> 6% from last term</div>
+            </div>
+        </div>
+        
+        <div class="parent-stat-card">
+            <div class="stat-icon red"><i class="ph ph-currency-inr"></i></div>
+            <div class="stat-content">
+                <h3>Pending Fees</h3>
+                <div class="stat-value">₹ {{ total_pending_fees|floatformat:0 }}</div>
+                <p>Due on 15 May 2025</p>
+                <div class="stat-trend action" style="padding:4px 12px; background:#FEF2F2; border-radius:20px; display:inline-block; margin-top:4px;">View Details</div>
+            </div>
+        </div>
+        
+        <div class="parent-stat-card">
+            <div class="stat-icon purple"><i class="ph ph-file-text"></i></div>
+            <div class="stat-content">
+                <h3>Upcoming Exams</h3>
+                <div class="stat-value">{{ upcoming_exams_count }}</div>
+                <p>Next: Mathematics (25 Apr)</p>
+                <div class="stat-trend action" style="padding:4px 12px; background:#F5F3FF; border-radius:20px; display:inline-block; margin-top:4px;">View Timetable</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 2: Attendance Trend, Subject Perf, Notifications -->
+    <div class="parent-grid grid-row-2">
+        <div class="parent-panel">
+            <div class="panel-header">
+                <h3><i class="ph ph-calendar"></i> Attendance Trend</h3>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">Last 6 Months <i class="ph ph-caret-down"></i></span>
+            </div>
+            <div class="chart-container">
+                <canvas id="attendanceTrendChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="parent-panel">
+            <div class="panel-header">
+                <h3><i class="ph ph-exam"></i> Subject Performance</h3>
+                <a href="#" class="panel-action">View Details <i class="ph ph-arrow-right"></i></a>
+            </div>
+            <div class="chart-container" style="padding: 10px 0;">
+                <canvas id="subjectPerformanceChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="parent-panel">
+            <div class="panel-header">
+                <h3><i class="ph ph-bell-ringing"></i> Recent Notifications</h3>
+                <a href="#" class="panel-action">View All <i class="ph ph-arrow-right"></i></a>
+            </div>
+            <div style="flex:1; overflow-y:auto; max-height: 250px;">
+                <div class="list-item">
+                    <div class="list-icon" style="background:#EFF6FF; color:#3B82F6;"><i class="ph ph-calendar"></i></div>
+                    <div class="list-content">
+                        <div style="display:flex; justify-content:space-between;">
+                            <h4>Exam Schedule</h4>
+                            <span class="list-time">2 hours ago</span>
+                        </div>
+                        <p>Mathematics exam is scheduled for 25 Apr 2025.</p>
+                    </div>
+                </div>
+                <div class="list-item">
+                    <div class="list-icon" style="background:#FEF2F2; color:#EF4444;"><i class="ph ph-currency-inr"></i></div>
+                    <div class="list-content">
+                        <div style="display:flex; justify-content:space-between;">
+                            <h4>Fee Reminder</h4>
+                            <span class="list-time">5 hours ago</span>
+                        </div>
+                        <p>Your child's fee payment is due in 7 days.</p>
+                    </div>
+                </div>
+                <div class="list-item">
+                    <div class="list-icon" style="background:#FFFBEB; color:#F59E0B;"><i class="ph ph-chalkboard-teacher"></i></div>
+                    <div class="list-content">
+                        <div style="display:flex; justify-content:space-between;">
+                            <h4>Teacher Suggestion</h4>
+                            <span class="list-time">1 day ago</span>
+                        </div>
+                        <p>Please encourage {{ selected_child.user.first_name }} to read more books.</p>
+                    </div>
+                </div>
+                <div class="list-item">
+                    <div class="list-icon" style="background:#EFF6FF; color:#3B82F6;"><i class="ph ph-buildings"></i></div>
+                    <div class="list-content">
+                        <div style="display:flex; justify-content:space-between;">
+                            <h4>School Update</h4>
+                            <span class="list-time">1 day ago</span>
+                        </div>
+                        <p>Annual Sports Day will be held on 16 May 2025.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 3: Schedule, Results, Fee Summary -->
+    <div class="parent-grid grid-row-3">
+        <div class="parent-panel">
+            <div class="panel-header">
+                <h3><i class="ph ph-calendar-blank"></i> Today's Schedule</h3>
+                <a href="#" class="panel-action">View Full Schedule <i class="ph ph-arrow-right"></i></a>
+            </div>
+            <table class="parent-table">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Subject</th>
+                        <th>Teacher</th>
+                        <th>Room</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sched in todays_timetable %}
+                    <tr>
+                        <td>{{ sched.period.start_time|time:"H:i" }} - {{ sched.period.end_time|time:"H:i" }}</td>
+                        <td>{{ sched.subject.name }}</td>
+                        <td>{{ sched.teacher.user.get_full_name }}</td>
+                        <td>Room 10{{ forloop.counter }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td>08:00 - 08:45</td><td>Mathematics</td><td>Ms. Sharma</td><td>Room 101</td></tr>
+                    <tr><td>09:00 - 09:45</td><td>English</td><td>Mr. Verma</td><td>Room 102</td></tr>
+                    <tr><td>10:00 - 10:45</td><td>Science</td><td>Ms. Gupta</td><td>Lab 1</td></tr>
+                    <tr><td>11:00 - 11:45</td><td>Social Studies</td><td>Mr. Khan</td><td>Room 103</td></tr>
+                    <tr><td>12:00 - 12:45</td><td>Computer</td><td>Ms. Singh</td><td>Computer Lab</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="parent-panel">
+            <div class="panel-header">
+                <h3><i class="ph ph-file-text"></i> Recent Results</h3>
+                <a href="#" class="panel-action">View All <i class="ph ph-arrow-right"></i></a>
+            </div>
+            <table class="parent-table">
+                <thead>
+                    <tr>
+                        <th>Exam</th>
+                        <th>Subject</th>
+                        <th>Marks</th>
+                        <th>Grade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for res in results_with_grades %}
+                    <tr>
+                        <td>{{ res.exam_name }}</td>
+                        <td>{{ res.subject }}</td>
+                        <td>{{ res.marks }} / 100</td>
+                        <td><span class="grade-badge {% if 'A' in res.grade %}a{% elif 'B' in res.grade %}b{% else %}c{% endif %}">{{ res.grade }}</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="parent-panel">
+            <div class="panel-header">
+                <h3><i class="ph ph-wallet"></i> Fee Summary</h3>
+                <a href="#" class="panel-action">View Details <i class="ph ph-arrow-right"></i></a>
+            </div>
+            <div style="display:flex; align-items:center; gap:20px; flex:1;">
+                <div style="width: 120px; height: 120px; position:relative;">
+                    <canvas id="feeChart"></canvas>
+                    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); text-align:center;">
+                        <div style="font-size:0.9rem; font-weight:700;">₹ 60,000</div>
+                        <div style="font-size:0.7rem; color:var(--text-muted);">Paid</div>
+                    </div>
+                </div>
+                <div style="flex:1;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+                        <span style="font-size:0.8rem;"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#10B981;margin-right:6px;"></span>Paid</span>
+                        <span style="font-size:0.8rem; font-weight:600;">₹ 60,000</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+                        <span style="font-size:0.8rem;"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#F59E0B;margin-right:6px;"></span>Pending</span>
+                        <span style="font-size:0.8rem; font-weight:600;">₹ 20,000</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:16px;">
+                        <span style="font-size:0.8rem;"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#EF4444;margin-right:6px;"></span>Overdue</span>
+                        <span style="font-size:0.8rem; font-weight:600;">₹ 0</span>
+                    </div>
+                    <div style="border-top:1px solid #E5E7EB; padding-top:8px; display:flex; justify-content:space-between;">
+                        <span style="font-size:0.85rem; color:var(--text-muted);">Total Fee</span>
+                        <span style="font-size:0.85rem; font-weight:700;">₹ 80,000</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 4: Assignments, Exams, Links, Events -->
+    <div class="parent-grid grid-row-4">
+        
+        <div class="parent-panel">
+            <div class="panel-header">
+                <h3><i class="ph ph-clipboard-text"></i> Upcoming Assignments</h3>
+                <a href="#" class="panel-action">View All <i class="ph ph-arrow-right"></i></a>
+            </div>
+            <table class="parent-table">
+                <thead>
+                    <tr><th>Subject</th><th>Title</th><th>Due Date</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Mathematics</td><td>Chapter 4 Worksheet</td><td>24 Apr 2025</td><td><span class="status-badge pending">Pending</span></td></tr>
+                    <tr><td>Science</td><td>Project on Ecosystem</td><td>26 Apr 2025</td><td><span class="status-badge pending">Pending</span></td></tr>
+                    <tr><td>English</td><td>Essay Writing</td><td>28 Apr 2025</td><td><span class="status-badge submitted">Submitted</span></td></tr>
+                    <tr><td>Social Studies</td><td>Map Activity</td><td>30 Apr 2025</td><td><span class="status-badge pending">Pending</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="parent-panel">
+            <div class="panel-header">
+                <h3><i class="ph ph-pencil-line"></i> Upcoming Exams</h3>
+                <a href="#" class="panel-action">View All <i class="ph ph-arrow-right"></i></a>
+            </div>
+            <table class="parent-table">
+                <thead>
+                    <tr><th>Exam</th><th>Subject</th><th>Date</th><th>Time</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Mid Term Exam</td><td>Mathematics</td><td>25 Apr 2025</td><td>10:00 AM</td></tr>
+                    <tr><td>Unit Test</td><td>Science</td><td>28 Apr 2025</td><td>09:00 AM</td></tr>
+                    <tr><td>Class Test</td><td>English</td><td>02 May 2025</td><td>10:00 AM</td></tr>
+                    <tr><td>Unit Test</td><td>Social Studies</td><td>05 May 2025</td><td>09:00 AM</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="parent-panel">
+            <div class="panel-header">
+                <h3><i class="ph ph-link"></i> Quick Links</h3>
+            </div>
+            <div class="quick-links-grid">
+                <div class="link-btn"><div class="icon-bg" style="background:#EFF6FF;color:#3B82F6;"><i class="ph ph-calendar"></i></div> View Timetable</div>
+                <div class="link-btn"><div class="icon-bg" style="background:#F5F3FF;color:#8B5CF6;"><i class="ph ph-book-open"></i></div> Study Material</div>
+                <div class="link-btn"><div class="icon-bg" style="background:#ECFDF5;color:#10B981;"><i class="ph ph-file-text"></i></div> Assignments</div>
+                <div class="link-btn"><div class="icon-bg" style="background:#FEF2F2;color:#EF4444;"><i class="ph ph-chart-bar"></i></div> Results</div>
+                <div class="link-btn"><div class="icon-bg" style="background:#F5F3FF;color:#8B5CF6;"><i class="ph ph-file-pdf"></i></div> Report Card</div>
+                <div class="link-btn"><div class="icon-bg" style="background:#FDF2F8;color:#EC4899;"><i class="ph ph-calendar-plus"></i></div> School Calendar</div>
+            </div>
+        </div>
+
+        <div class="parent-panel">
+            <div class="panel-header">
+                <h3>Upcoming Events</h3>
+                <a href="#" class="panel-action">View All <i class="ph ph-arrow-right"></i></a>
+            </div>
+            <div style="flex:1; overflow-y:auto;">
+                <div class="list-item" style="padding:6px 0;">
+                    <div style="text-align:center; padding:4px 8px; border-right:2px solid #E5E7EB; min-width:40px;">
+                        <div style="color:var(--parent-primary); font-weight:700; font-size:1.1rem;">16</div>
+                        <div style="font-size:0.7rem; color:var(--text-muted);">May</div>
+                    </div>
+                    <div class="list-content" style="padding-left:8px;">
+                        <h4 style="font-size:0.8rem; margin-bottom:2px;">Annual Sports Day</h4>
+                        <p style="font-size:0.7rem;">9:00 AM - 4:00 PM</p>
+                    </div>
+                </div>
+                <div class="list-item" style="padding:6px 0;">
+                    <div style="text-align:center; padding:4px 8px; border-right:2px solid #E5E7EB; min-width:40px;">
+                        <div style="color:#F59E0B; font-weight:700; font-size:1.1rem;">22</div>
+                        <div style="font-size:0.7rem; color:var(--text-muted);">May</div>
+                    </div>
+                    <div class="list-content" style="padding-left:8px;">
+                        <h4 style="font-size:0.8rem; margin-bottom:2px;">Parent Teacher Meeting</h4>
+                        <p style="font-size:0.7rem;">10:00 AM - 1:00 PM</p>
+                    </div>
+                </div>
+                <div class="list-item" style="padding:6px 0;">
+                    <div style="text-align:center; padding:4px 8px; border-right:2px solid #E5E7EB; min-width:40px;">
+                        <div style="color:#EF4444; font-weight:700; font-size:1.1rem;">15</div>
+                        <div style="font-size:0.7rem; color:var(--text-muted);">Jun</div>
+                    </div>
+                    <div class="list-content" style="padding-left:8px;">
+                        <h4 style="font-size:0.8rem; margin-bottom:2px;">Summer Vacation</h4>
+                        <p style="font-size:0.7rem;">(Starts)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
 </div>
+
+<script>
+    function toggleDropdown() {
+        const dd = document.getElementById('childDropdown');
+        dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        // 1. Attendance Trend (Combo Chart)
+        const ctxTrend = document.getElementById('attendanceTrendChart').getContext('2d');
+        new Chart(ctxTrend, {
+            type: 'bar',
+            data: {
+                labels: {{ trend_labels|safe }},
+                datasets: [
+                    {
+                        type: 'line',
+                        label: 'Avg',
+                        data: {{ trend_line|safe }},
+                        borderColor: '#10B981',
+                        backgroundColor: '#10B981',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#10B981',
+                        yAxisID: 'y'
+                    },
+                    {
+                        type: 'bar',
+                        label: 'Present',
+                        data: {{ trend_present|safe }},
+                        backgroundColor: '#10B981',
+                        barPercentage: 0.6,
+                        categoryPercentage: 0.8
+                    },
+                    {
+                        type: 'bar',
+                        label: 'Absent',
+                        data: {{ trend_absent|safe }},
+                        backgroundColor: '#EF4444',
+                        barPercentage: 0.6,
+                        categoryPercentage: 0.8
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top', align: 'end', labels: { boxWidth: 10, usePointStyle: true, font: {size: 11} } }
+                },
+                scales: {
+                    x: { grid: { display: false }, stacked: false },
+                    y: { 
+                        beginAtZero: true, max: 100,
+                        grid: { borderDash: [4, 4] },
+                        ticks: { callback: function(value) { return value + '%'; } }
+                    }
+                }
+            }
+        });
+
+        // 2. Subject Performance (Horizontal Bar)
+        const ctxSubject = document.getElementById('subjectPerformanceChart').getContext('2d');
+        const bgColors = ['#3B82F6', '#10B981', '#8B5CF6', '#F59E0B'];
+        new Chart(ctxSubject, {
+            type: 'bar',
+            data: {
+                labels: {{ subj_labels|safe }},
+                datasets: [{
+                    data: {{ subj_scores|safe }},
+                    backgroundColor: bgColors,
+                    borderRadius: 4,
+                    barThickness: 12
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: { display: false, max: 100 },
+                    y: { 
+                        grid: { display: false }, 
+                        border: { display: false },
+                        ticks: { font: {size: 12, weight: '500'}, color: '#1F2937' }
+                    }
+                }
+            }
+        });
+
+        // 3. Fee Summary (Doughnut)
+        const ctxFee = document.getElementById('feeChart').getContext('2d');
+        new Chart(ctxFee, {
+            type: 'doughnut',
+            data: {
+                labels: ['Paid', 'Pending'],
+                datasets: [{
+                    data: [60000, 20000],
+                    backgroundColor: ['#10B981', '#F59E0B'],
+                    borderWidth: 0,
+                    cutout: '75%'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: false }
+                }
+            }
+        });
+    });
+</script>
 {% endblock %}
