@@ -122,13 +122,13 @@
             <button class="action-btn" onclick="location.href='{% url 'announcements' %}'">
                 <i class="ph ph-megaphone" style="color:#EC4899;"></i> Create<br>Announcement
             </button>
-            <button class="action-btn" onclick="location.href='{% url 'examinations' %}'">
+            <button class="action-btn" onclick="location.href='{% url 'exam_list' %}'">
                 <i class="ph ph-clipboard-text" style="color:#10B981;"></i> Conduct<br>Exam
             </button>
             <button class="action-btn" onclick="location.href='{% url 'assignment_list' %}'">
                 <i class="ph ph-file-text" style="color:#F59E0B;"></i> Add<br>Assignment
             </button>
-            <button class="action-btn" onclick="location.href='{% url 'results' %}'">
+            <button class="action-btn" onclick="location.href='{% url 'exam_list' %}'">
                 <i class="ph ph-chart-bar" style="color:#06B6D4;"></i> View<br>Results
             </button>
         </div>
@@ -238,7 +238,7 @@
     <div class="dashboard-panel col-2">
         <div class="section-header">
             <h3>Examination & Results</h3>
-            <a href="{% url 'examinations' %}" class="section-action">View All</a>
+            <a href="{% url 'exam_list' %}" class="section-action">View All</a>
         </div>
         <div class="panel-content">
             {% for exam in recent_exams %}
@@ -250,7 +250,7 @@
                     <h4>{{ exam.title }} - {{ exam.class_assigned.name }}</h4>
                     <p>Conducted on {{ exam.date|date:"d M Y" }}</p>
                 </div>
-                <button class="item-action" style="background:#F3F4F6; color:#4F46E5; border:1px solid #E0E7FF;" onclick="location.href='{% url 'results' %}'">View Results</button>
+                <button class="item-action" style="background:#F3F4F6; color:#4F46E5; border:1px solid #E0E7FF;" onclick="location.href='{% url 'exam_list' %}'">View Results</button>
             </div>
             {% empty %}
             <p style="color:var(--text-muted); text-align:center;">No recent examinations.</p>

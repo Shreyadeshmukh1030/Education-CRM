@@ -19,3 +19,19 @@ class SchoolSettingsUpdateView(LoginRequiredMixin, UpdateView):
         # Always get or create the first school object for settings
         school, created = School.objects.get_or_create(id=1, defaults={'name': 'My School'})
         return school
+
+from django.views.generic import ListView
+from apps.academics.models import Announcement
+from .models import SchoolUpdate
+
+class AnnouncementListView(LoginRequiredMixin, ListView):
+    model = Announcement
+    template_name = 'schools/announcement_list.html'
+    context_object_name = 'announcements'
+    ordering = ['-created_at']
+
+class SchoolUpdateListView(LoginRequiredMixin, ListView):
+    model = SchoolUpdate
+    template_name = 'schools/update_list.html'
+    context_object_name = 'updates'
+    ordering = ['-date']

@@ -1,0 +1,51 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Mark Exam Results - EduCore CRM{% endblock %}
+
+{% block content %}
+<div class="dashboard-header animate-fade-in stagger-1" style="margin-bottom: 24px;">
+    <a href="{% url 'exam_list' %}" style="color: var(--text-muted); text-decoration: none; display: inline-flex; align-items: center; margin-bottom: 10px;">
+        <i class="ph ph-arrow-left" style="margin-right: 5px;"></i> Back to Exams
+    </a>
+    <h1 style="font-size: 2rem; margin-bottom: 5px;">Mark Results: {{ exam.title }}</h1>
+    <p style="color: var(--text-muted);">Class: {{ exam.class_assigned.name }} | Subject: {{ exam.subject.name }} | Max Marks: {{ exam.max_marks }}</p>
+</div>
+
+<div class="card animate-fade-in stagger-2" style="padding: 0; overflow: hidden;">
+    <form method="post">
+        {% csrf_token %}
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead style="background-color: var(--background-color); border-bottom: 2px solid var(--border-color);">
+                    <tr>
+                        <th style="padding: 15px 20px; font-weight: 600; color: var(--text-muted);">Student Name</th>
+                        <th style="padding: 15px 20px; font-weight: 600; color: var(--text-muted);">Marks Obtained</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data in student_data %}
+                    <tr style="border-bottom: 1px solid var(--border-color); transition: background-color var(--transition-fast);">
+                        <td style="padding: 15px 20px; font-weight: 500;">
+                            {{ data.student.user.first_name }} {{ data.student.user.last_name }}
+                        </td>
+                        <td style="padding: 15px 20px;">
+                            <input type="number" name="marks_{{ data.student.id }}" value="{{ data.marks }}" step="0.01" min="0" max="{{ exam.max_marks }}" style="padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 6px; width: 120px;" placeholder="Marks">
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="2" style="padding: 30px; text-align: center; color: var(--text-muted);">
+                            <p>No students found in this class.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div style="padding: 20px; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end;">
+            <button type="submit" class="btn btn-primary" style="background-color: var(--primary-color); color: #fff;">Save All Results</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

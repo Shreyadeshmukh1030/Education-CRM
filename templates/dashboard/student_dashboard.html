@@ -116,23 +116,23 @@
                 <h3><i class="ph ph-magnifying-glass"></i> Quick Actions</h3>
             </div>
             <div class="quick-actions-grid">
-                <button class="action-btn-student">
+                <button class="action-btn-student" onclick="window.location.href='{% url 'assignment_list' %}'">
                     <div class="stat-icon blue" style="width:32px;height:32px;font-size:16px;"><i class="ph ph-clipboard-text"></i></div> View Assignments
                 </button>
-                <button class="action-btn-student">
+                <button class="action-btn-student" onclick="window.location.href='{% url 'material_list' %}'">
                     <div class="stat-icon purple" style="width:32px;height:32px;font-size:16px;"><i class="ph ph-book-open"></i></div> Study Material
                 </button>
-                <button class="action-btn-student">
+                <button class="action-btn-student" onclick="window.location.href='{% url 'exam_list' %}'">
                     <div class="stat-icon orange" style="width:32px;height:32px;font-size:16px;"><i class="ph ph-chart-bar"></i></div> Check Results
                 </button>
-                <button class="action-btn-student">
+                <button class="action-btn-student" onclick="window.location.href='{% url 'syllabus_list' %}'">
                     <div class="stat-icon blue" style="width:32px;height:32px;font-size:16px;"><i class="ph ph-book-bookmark"></i></div> View Syllabus
                 </button>
-                <button class="action-btn-student">
+                <button class="action-btn-student" onclick="window.location.href='{% url 'fee_list' %}'">
                     <div class="stat-icon orange" style="width:32px;height:32px;font-size:16px;"><i class="ph ph-currency-inr"></i></div> Check Fees
                 </button>
-                <button class="action-btn-student">
-                    <div class="stat-icon green" style="width:32px;height:32px;font-size:16px;"><i class="ph ph-envelope-simple"></i></div> Send Message
+                <button class="action-btn-student" onclick="window.location.href='{% url 'announcements' %}'">
+                    <div class="stat-icon green" style="width:32px;height:32px;font-size:16px;"><i class="ph ph-megaphone"></i></div> Announcements
                 </button>
             </div>
         </div>
@@ -160,7 +160,7 @@
                 <div class="detail-value">{{ student.emergency_contact|default:"-" }}</div>
             </div>
             
-            <a href="#" class="panel-action" style="display:block; margin-top:16px; background:#F3F4F6; padding:8px; border-radius:8px; text-align:center;">View Full Profile <i class="ph ph-arrow-right"></i></a>
+            <a href="{% if student %}{% url 'student_detail' student.pk %}{% else %}#{% endif %}" class="panel-action" style="display:block; margin-top:16px; background:#F3F4F6; padding:8px; border-radius:8px; text-align:center;">View Full Profile <i class="ph ph-arrow-right"></i></a>
         </div>
     </div>
 
@@ -169,7 +169,7 @@
         <div class="dashboard-panel">
             <div class="panel-header">
                 <h3><i class="ph ph-chart-pie-slice"></i> Attendance Overview</h3>
-                <a href="#" class="panel-action">View Details</a>
+                <a href="{% url 'attendance_select' %}" class="panel-action">View Details</a>
             </div>
             <div class="chart-container">
                 <canvas id="attendanceChart"></canvas>
@@ -184,7 +184,7 @@
         <div class="dashboard-panel">
             <div class="panel-header">
                 <h3><i class="ph ph-squares-four"></i> Subject Performance</h3>
-                <a href="#" class="panel-action">View Details</a>
+                <a href="{% url 'exam_list' %}" class="panel-action">View Details</a>
             </div>
             <div class="chart-container" style="min-height: 200px;">
                 <canvas id="performanceChart"></canvas>
@@ -194,7 +194,7 @@
         <div class="dashboard-panel">
             <div class="panel-header">
                 <h3><i class="ph ph-megaphone"></i> Recent Announcements</h3>
-                <a href="#" class="panel-action">View All</a>
+                <a href="{% url 'announcements' %}" class="panel-action">View All</a>
             </div>
             <div style="flex:1; overflow-y:auto;">
                 {% for ann in recent_announcements %}
@@ -220,7 +220,7 @@
         <div class="dashboard-panel">
             <div class="panel-header">
                 <h3><i class="ph ph-clipboard-text"></i> Upcoming Assignments</h3>
-                <a href="#" class="panel-action">View All</a>
+                <a href="{% url 'assignment_list' %}" class="panel-action">View All</a>
             </div>
             <table class="student-table">
                 <thead>
@@ -249,7 +249,7 @@
         <div class="dashboard-panel">
             <div class="panel-header">
                 <h3><i class="ph ph-calendar-blank"></i> Upcoming Exams</h3>
-                <a href="#" class="panel-action">View All</a>
+                <a href="{% url 'exam_list' %}" class="panel-action">View All</a>
             </div>
             <table class="student-table">
                 <thead>
@@ -276,7 +276,7 @@
         <div class="dashboard-panel">
             <div class="panel-header">
                 <h3><i class="ph ph-image"></i> School Updates & Events</h3>
-                <a href="#" class="panel-action">View All</a>
+                <a href="{% url 'school_updates' %}" class="panel-action">View All</a>
             </div>
             <div style="flex:1;">
                 {% for update in school_updates %}

@@ -1,0 +1,172 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %}Report Card - {{ student.user.get_full_name }} | EduCore CRM{% endblock %}
+{% block page_title %}Report Card: {{ student.user.get_full_name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.marksheet-header {
+    text-align: center;
+    border-bottom: 2px solid #E5E7EB;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+.marksheet-header h2 {
+    margin: 0 0 10px 0;
+    color: var(--primary-color);
+}
+.student-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    background: #F9FAFB;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #E5E7EB;
+}
+.student-info-col p {
+    margin: 5px 0;
+    color: #4B5563;
+}
+.student-info-col strong {
+    color: #111827;
+}
+.exam-section {
+    margin-bottom: 40px;
+}
+.exam-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #1F2937;
+    background: #F3F4F6;
+    padding: 10px 15px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+}
+.marks-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.marks-table th, .marks-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #E5E7EB;
+}
+.marks-table th {
+    background: #F9FAFB;
+    font-weight: 600;
+    color: #374151;
+}
+.grade-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+.grade-badge.a { background: #ECFDF5; color: #10B981; }
+.grade-badge.b { background: #EFF6FF; color: #3B82F6; }
+.grade-badge.c { background: #FEF2F2; color: #EF4444; }
+.print-btn {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+}
+@media print {
+    body { background: white; }
+    .sidebar, .top-header, .print-btn { display: none !important; }
+    .main-content { margin: 0 !important; padding: 0 !important; width: 100% !important; }
+    .card { box-shadow: none !important; border: none !important; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card" style="position: relative;">
+    <button onclick="window.print()" class="btn btn-primary print-btn">
+        <i class="ph ph-printer"></i> Print
+    </button>
+    
+    <div class="marksheet-header">
+        <h2>{{ student.school.name|default:"EduCore School" }}</h2>
+        <p style="margin: 0; color: #6B7280;">{{ student.school.address|default:"123 Education Lane, City" }}</p>
+        <h3 style="margin: 15px 0 0 0;">STUDENT REPORT CARD</h3>
+    </div>
+
+    <div class="student-info">
+        <div class="student-info-col">
+            <p><strong>Student Name:</strong> {{ student.user.get_full_name }}</p>
+            <p><strong>Roll No:</strong> {{ student.id }}</p>
+            <p><strong>Date of Birth:</strong> {{ student.date_of_birth|date:"d M Y" }}</p>
+        </div>
+        <div class="student-info-col">
+            <p><strong>Class:</strong> {{ student.current_class.name }}</p>
+            <p><strong>Academic Year:</strong> 2024-2025</p>
+            <p><strong>Emergency Contact:</strong> {{ student.emergency_contact }}</p>
+        </div>
+    </div>
+
+    {% if exams_dict %}
+        {% for exam, results in exams_dict.items %}
+        <div class="exam-section">
+            <div class="exam-title">
+                <span>{{ exam.title }}</span>
+                <span>{{ exam.date|date:"F Y" }}</span>
+            </div>
+            
+            <table class="marks-table">
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Maximum Marks</th>
+                        <th>Marks Obtained</th>
+                        <th>Grade</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in results %}
+                    <tr>
+                        <td>{{ result.subject.name }}</td>
+                        <td>{{ result.exam.max_marks|default:"100" }}</td>
+                        <td><strong>{{ result.marks_obtained }}</strong></td>
+                        <td>
+                            {% if result.grade == 'A' or result.grade == 'A+' %}
+                                <span class="grade-badge a">{{ result.grade }}</span>
+                            {% elif result.grade == 'B' or result.grade == 'B+' %}
+                                <span class="grade-badge b">{{ result.grade }}</span>
+                            {% else %}
+                                <span class="grade-badge c">{{ result.grade }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ result.remarks|default:"-" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div style="text-align: center; padding: 40px; color: #6B7280;">
+            <i class="ph ph-empty" style="font-size: 48px; margin-bottom: 16px;"></i>
+            <p>No exam results found for this student yet.</p>
+        </div>
+    {% endif %}
+
+    <div style="margin-top: 60px; display: flex; justify-content: space-between;">
+        <div style="text-align: center;">
+            <div style="width: 150px; border-bottom: 1px solid #000; margin-bottom: 10px;"></div>
+            <p style="margin: 0; font-size: 0.9rem;">Class Teacher's Signature</p>
+        </div>
+        <div style="text-align: center;">
+            <div style="width: 150px; border-bottom: 1px solid #000; margin-bottom: 10px;"></div>
+            <p style="margin: 0; font-size: 0.9rem;">Principal's Signature</p>
+        </div>
+        <div style="text-align: center;">
+            <div style="width: 150px; border-bottom: 1px solid #000; margin-bottom: 10px;"></div>
+            <p style="margin: 0; font-size: 0.9rem;">Parent's Signature</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

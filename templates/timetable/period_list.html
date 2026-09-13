@@ -1,0 +1,53 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Periods - EduCore CRM{% endblock %}
+
+{% block content %}
+<div class="dashboard-header animate-fade-in stagger-1" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+    <div>
+        <h1 style="font-size: 2rem; margin-bottom: 5px;">Periods</h1>
+        <p style="color: var(--text-muted);">Manage periods.</p>
+    </div>
+    <a href="{% url 'period_add' %}" class="btn btn-primary" style="background-color: var(--primary-color); color: #fff; box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.2);">
+        <i class="ph ph-plus-circle" style="margin-right: 8px; font-size: 1.2rem;"></i> Add Period
+    </a>
+</div>
+
+<div class="card animate-fade-in stagger-2" style="padding: 0; overflow: hidden;">
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead style="background-color: var(--background-color); border-bottom: 2px solid var(--border-color);">
+                <tr>
+                    <th style="padding: 15px 20px; font-weight: 600; color: var(--text-muted);">Name</th>
+<th style="padding: 15px 20px; font-weight: 600; color: var(--text-muted);">Start Time</th>
+<th style="padding: 15px 20px; font-weight: 600; color: var(--text-muted);">End Time</th>
+<th style="padding: 15px 20px; font-weight: 600; color: var(--text-muted);">Is Break</th>
+<th style="padding: 15px 20px; font-weight: 600; color: var(--text-muted);">Order</th>
+                    <th style="padding: 15px 20px; font-weight: 600; color: var(--text-muted); text-align: right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for period_obj in periods %}
+                <tr style="border-bottom: 1px solid var(--border-color); transition: background-color var(--transition-fast);">
+                    <td style="padding: 15px 20px; color: var(--text-muted);">{{ period_obj.name }}</td>
+<td style="padding: 15px 20px; color: var(--text-muted);">{{ period_obj.start_time }}</td>
+<td style="padding: 15px 20px; color: var(--text-muted);">{{ period_obj.end_time }}</td>
+<td style="padding: 15px 20px; color: var(--text-muted);">{{ period_obj.is_break }}</td>
+<td style="padding: 15px 20px; color: var(--text-muted);">{{ period_obj.order }}</td>
+                    <td style="padding: 15px 20px; text-align: right;">
+                        <a href="{% url 'period_edit' period_obj.pk %}" style="color: var(--text-muted); margin-right: 10px; transition: color var(--transition-fast);" onmouseover="this.style.color='var(--primary-color)'" onmouseout="this.style.color='var(--text-muted)'"><i class="ph ph-pencil-simple" style="font-size: 1.2rem;"></i></a>
+                        <a href="{% url 'period_delete' period_obj.pk %}" style="color: var(--text-muted); transition: color var(--transition-fast);" onmouseover="this.style.color='var(--danger-color)'" onmouseout="this.style.color='var(--text-muted)'"><i class="ph ph-trash" style="font-size: 1.2rem;"></i></a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="100" style="padding: 30px; text-align: center; color: var(--text-muted);">
+                        <p>No periods found.</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

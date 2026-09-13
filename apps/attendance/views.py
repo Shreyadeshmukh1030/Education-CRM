@@ -23,10 +23,7 @@ class AttendanceMarkingView(LoginRequiredMixin, View):
         class_obj = get_object_or_404(Class, id=class_id)
         # Assuming we just fetch all students in the school for now, 
         # normally we'd filter by student.current_class == class_obj
-        # But our StudentProfile doesn't have a direct class field yet, we'll fetch all students and pretend they're in the class for demo purposes, 
-        # or we should probably add a ManyToMany field or direct ForeignKey on StudentProfile to Class.
-        # Let's check StudentProfile structure.
-        students = StudentProfile.objects.all()
+        students = StudentProfile.objects.filter(current_class=class_obj)
         
         # Check existing records
         existing_records = AttendanceRecord.objects.filter(
@@ -53,7 +50,7 @@ class AttendanceMarkingView(LoginRequiredMixin, View):
         
     def post(self, request, class_id, date_str):
         class_obj = get_object_or_404(Class, id=class_id)
-        students = StudentProfile.objects.all()
+        students = StudentProfile.objects.filter(current_class=class_obj)
         
         for student in students:
             status = request.POST.get(f'status_{student.id}')

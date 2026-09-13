@@ -1,0 +1,295 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduCore - Complete School CRM & ERP</title>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+</head>
+<body>
+    <div class="hero-bg-blob"></div>
+    
+    <div class="container">
+        <!-- Header -->
+        <header class="navbar">
+            <div class="logo">
+                <i class="ph-fill ph-book-open"></i>
+                <div class="logo-text">
+                    <strong>EduCore</strong>
+                    <span>School CRM & ERP</span>
+                </div>
+            </div>
+            
+            <nav class="nav-links">
+                <a href="#" class="active">Home</a>
+                <a href="#features">Features</a>
+                <a href="#modules">Modules</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#about">About Us</a>
+                <a href="#contact">Contact</a>
+            </nav>
+            
+            <div class="nav-actions">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}" class="btn btn-primary">Go to Dashboard</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-outline"><i class="ph ph-user"></i> Login</a>
+                    <a href="{% url 'login' %}" class="btn btn-primary">Get Started</a>
+                {% endif %}
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <div class="badge">
+                        <i class="ph-fill ph-graduation-cap"></i> Smarter School Management for a Brighter Future
+                    </div>
+                    <h1 class="hero-title">
+                        Complete School CRM & ERP <br> for <span class="highlight">Modern Education</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        Streamline administration, enhance communication, manage academics, track performance and build stronger relationships — all in one powerful platform.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="{% url 'login' %}" class="btn btn-primary">
+                            Get Started Free <i class="ph ph-arrow-right"></i>
+                        </a>
+                        <a href="#" class="btn btn-secondary">
+                            <i class="ph ph-play-circle"></i> Watch Demo
+                        </a>
+                    </div>
+                    <div class="hero-features">
+                        <div class="hero-feature-item">
+                            <i class="ph-fill ph-check-circle"></i> Multi-School Support
+                        </div>
+                        <div class="hero-feature-item">
+                            <i class="ph-fill ph-check-circle"></i> Secure & Reliable
+                        </div>
+                        <div class="hero-feature-item">
+                            <i class="ph-fill ph-check-circle"></i> Mobile Responsive
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="hero-image-wrapper">
+                    <img src="{% static 'images/landing_hero.jpg' %}" alt="Students in front of school">
+                    <div class="floating-widget">
+                        <div class="widget-icon">
+                            <i class="ph ph-calendar-blank"></i>
+                        </div>
+                        <div class="widget-text">
+                            <h4>Parent-Teacher Meeting</h4>
+                            <p>25 Apr 2025 • 10:00 AM - 12:00 PM</p>
+                        </div>
+                        <i class="ph ph-arrow-right" style="color: var(--text-muted); margin-left: auto;"></i>
+                    </div>
+                    
+                    <div class="hand-drawn">
+                        Better<br>Learning<br>Together<br>
+                        <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <div class="stats-card">
+                <div class="stat-item">
+                    <div class="stat-icon blue"><i class="ph-fill ph-users-three"></i></div>
+                    <div class="stat-text">
+                        <h3>1,248</h3>
+                        <p>Total Students</p>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon green"><i class="ph-fill ph-chalkboard-teacher"></i></div>
+                    <div class="stat-text">
+                        <h3>86</h3>
+                        <p>Total Teachers</p>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon purple"><i class="ph-fill ph-monitor"></i></div>
+                    <div class="stat-text">
+                        <h3>36</h3>
+                        <p>Total Classes</p>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon orange"><i class="ph-fill ph-buildings"></i></div>
+                    <div class="stat-text">
+                        <h3>15</h3>
+                        <p>Academic Years</p>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon teal"><i class="ph-fill ph-star"></i></div>
+                    <div class="stat-text">
+                        <h3>98%</h3>
+                        <p>Parent Satisfaction</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Grid -->
+        <section class="section-header" id="features">
+            <p class="section-subtitle">Why Choose EduCore?</p>
+            <h2 class="section-title">Everything Your School Needs, In One Place</h2>
+            <p class="section-desc">A complete, modular and scalable solution designed to simplify school operations, improve communication and support every stakeholder.</p>
+        </section>
+
+        <section class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon" style="background: rgba(59, 130, 246, 0.1); color: var(--accent-blue);">
+                    <i class="ph-fill ph-users"></i>
+                </div>
+                <h4>Student Management</h4>
+                <p>Complete student lifecycle from admission to graduation.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-green);">
+                    <i class="ph-fill ph-book-open"></i>
+                </div>
+                <h4>Academics & Exams</h4>
+                <p>Manage syllabus, assignments, exams, results and report cards.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-green);">
+                    <i class="ph-fill ph-currency-inr"></i>
+                </div>
+                <h4>Fee Management</h4>
+                <p>Track fees, payments, receipts and send automated reminders.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background: rgba(139, 92, 246, 0.1); color: var(--accent-purple);">
+                    <i class="ph-fill ph-chat-circle-dots"></i>
+                </div>
+                <h4>Parent Communication</h4>
+                <p>Keep parents informed with updates, notifications and messages.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background: rgba(59, 130, 246, 0.1); color: var(--accent-blue);">
+                    <i class="ph-fill ph-chart-bar"></i>
+                </div>
+                <h4>Reports & Analytics</h4>
+                <p>Generate detailed reports and get valuable insights.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon" style="background: rgba(59, 130, 246, 0.1); color: var(--accent-blue);">
+                    <i class="ph-fill ph-user-plus"></i>
+                </div>
+                <h4>Admissions CRM</h4>
+                <p>Manage leads, enquiries, applications and admissions efficiently.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background: rgba(139, 92, 246, 0.1); color: var(--accent-purple);">
+                    <i class="ph-fill ph-image"></i>
+                </div>
+                <h4>School Content</h4>
+                <p>Share news, events, gallery and school updates.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background: rgba(59, 130, 246, 0.1); color: var(--accent-blue);">
+                    <i class="ph-fill ph-shield-check"></i>
+                </div>
+                <h4>Role-Based Access</h4>
+                <p>Secure and customizable access for every user role.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background: rgba(20, 184, 166, 0.1); color: var(--accent-teal);">
+                    <i class="ph-fill ph-device-mobile"></i>
+                </div>
+                <h4>Mobile Friendly</h4>
+                <p>Access anytime, anywhere on any device.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background: rgba(139, 92, 246, 0.1); color: var(--accent-purple);">
+                    <i class="ph-fill ph-puzzle-piece"></i>
+                </div>
+                <h4>Extensible Modules</h4>
+                <p>Add optional modules like transport, library, hostel and more.</p>
+            </div>
+        </section>
+    </div> <!-- End Container -->
+
+    <!-- Portals Section -->
+    <section class="portals-section" id="modules">
+        <div class="container">
+            <div class="portals-header">
+                <div>
+                    <p class="section-subtitle">Portals For Everyone</p>
+                    <h2 class="section-title" style="margin-bottom:0;">Dedicated Dashboards for Each Role</h2>
+                </div>
+            </div>
+            
+            <div class="portals-grid">
+                <div class="portal-card" onclick="window.location.href='{% url 'login' %}'">
+                    <div class="portal-content">
+                        <div class="portal-icon" style="background: rgba(59, 130, 246, 0.1); color: var(--accent-blue);">
+                            <i class="ph-fill ph-user-gear"></i>
+                        </div>
+                        <div class="portal-text">
+                            <h4>Admin</h4>
+                            <p>Manage the entire school</p>
+                        </div>
+                    </div>
+                    <i class="ph ph-caret-right portal-arrow"></i>
+                </div>
+                
+                <div class="portal-card" onclick="window.location.href='{% url 'login' %}'">
+                    <div class="portal-content">
+                        <div class="portal-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-green);">
+                            <i class="ph-fill ph-chalkboard-teacher"></i>
+                        </div>
+                        <div class="portal-text">
+                            <h4>Teacher</h4>
+                            <p>Teach, guide, inspire</p>
+                        </div>
+                    </div>
+                    <i class="ph ph-caret-right portal-arrow"></i>
+                </div>
+                
+                <div class="portal-card" onclick="window.location.href='{% url 'login' %}'">
+                    <div class="portal-content">
+                        <div class="portal-icon" style="background: rgba(139, 92, 246, 0.1); color: var(--accent-purple);">
+                            <i class="ph-fill ph-student"></i>
+                        </div>
+                        <div class="portal-text">
+                            <h4>Student</h4>
+                            <p>Learn, grow, achieve</p>
+                        </div>
+                    </div>
+                    <i class="ph ph-caret-right portal-arrow"></i>
+                </div>
+                
+                <div class="portal-card" onclick="window.location.href='{% url 'login' %}'">
+                    <div class="portal-content">
+                        <div class="portal-icon" style="background: rgba(244, 63, 94, 0.1); color: #F43F5E;">
+                            <i class="ph-fill ph-users-three"></i>
+                        </div>
+                        <div class="portal-text">
+                            <h4>Parent</h4>
+                            <p>Stay connected, stay informed</p>
+                        </div>
+                    </div>
+                    <i class="ph ph-caret-right portal-arrow"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

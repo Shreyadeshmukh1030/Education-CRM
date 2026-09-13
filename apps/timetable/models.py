@@ -16,18 +16,19 @@ class Period(models.Model):
 
 class ClassSchedule(models.Model):
     DAY_CHOICES = (
-        ('Monday', 'Monday'),
-        ('Tuesday', 'Tuesday'),
-        ('Wednesday', 'Wednesday'),
-        ('Thursday', 'Thursday'),
-        ('Friday', 'Friday'),
-        ('Saturday', 'Saturday'),
-        ('Sunday', 'Sunday'),
+        (0, 'Monday'),
+        (1, 'Tuesday'),
+        (2, 'Wednesday'),
+        (3, 'Thursday'),
+        (4, 'Friday'),
+        (5, 'Saturday'),
+        (6, 'Sunday'),
     )
     
+    school = models.ForeignKey('schools.School', on_delete=models.CASCADE, related_name='class_schedules')
     class_assigned = models.ForeignKey('academics.Class', on_delete=models.CASCADE, related_name='schedules')
     period = models.ForeignKey(Period, on_delete=models.CASCADE, related_name='schedules')
-    day_of_week = models.CharField(max_length=15, choices=DAY_CHOICES)
+    day_of_week = models.IntegerField(choices=DAY_CHOICES)
     subject = models.ForeignKey('academics.Subject', on_delete=models.CASCADE, related_name='schedules')
     teacher = models.ForeignKey('teachers.TeacherProfile', on_delete=models.SET_NULL, null=True, blank=True, related_name='schedules')
     room = models.CharField(max_length=50, blank=True)
@@ -36,4 +37,4 @@ class ClassSchedule(models.Model):
         unique_together = ('class_assigned', 'period', 'day_of_week')
         
     def __str__(self):
-        return f"{self.class_assigned.name} - {self.day_of_week} - {self.period.name}"
+        return f"{self.class_assigned.name} - {self.get_day_of_week_display()} - {self.period.name}"

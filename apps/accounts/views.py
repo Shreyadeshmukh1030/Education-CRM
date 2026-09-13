@@ -10,6 +10,13 @@ from apps.schools.models import SchoolUpdate
 from datetime import date
 from django.db.models import Count, Q
 
+def landing_page_view(request):
+    if request.user.is_authenticated:
+        # Optionally we could redirect, but let's just render the landing page 
+        # and show 'Dashboard' in the top right instead of 'Login'
+        pass
+    return render(request, 'pages/landing.html')
+
 @login_required
 def dashboard_view(request):
     user = request.user
@@ -32,7 +39,7 @@ def dashboard_view(request):
         role_name = user.role.name.lower()
         if 'admin' in role_name:
             from apps.academics.models import Section, ExamResult
-            from apps.students.models import FeeInvoice
+            from apps.finance.models import Invoice
             from datetime import timedelta
             
             # Global Stats
@@ -49,34 +56,25 @@ def dashboard_view(request):
             total_present = attendance_today.filter(status='Present').count()
             total_marked = attendance_today.count()
             attendance_percentage = int((total_present / total_marked * 100)) if total_marked > 0 else 0
-            if total_marked == 0:
-                attendance_percentage = 94
-                total_present = 1048
-                total_marked = 1112
             
             # Global Pending Fees
-            pending_invoices = FeeInvoice.objects.filter(is_paid=False)
+            pending_invoices = Invoice.objects.filter(is_paid=False)
             total_pending_fees = sum(inv.amount for inv in pending_invoices)
             students_with_pending_fees = pending_invoices.values('student').distinct().count()
-            if total_pending_fees == 0:
-                total_pending_fees = 480000
-                students_with_pending_fees = 28
             
             # New Admissions this month
             current_month = today.month
             new_admissions = StudentProfile.objects.filter(admission_date__month=current_month).count()
-            if new_admissions == 0:
-                new_admissions = 15 # Mock data if empty
                 
-            # Dummy Growth Data for Chart
+            # Dummy Growth Data for Chart (Keep for now, but empty it)
             growth_labels = ['Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr']
-            growth_students = [750, 800, 950, 1050, 1100, 1248]
-            growth_admissions = [250, 200, 300, 400, 410, 420]
+            growth_students = [0, 0, 0, 0, 0, 0]
+            growth_admissions = [0, 0, 0, 0, 0, 0]
             
-            # Dummy Attendance Trend for Chart
+            # Dummy Attendance Trend for Chart (Keep for now, but empty it)
             trend_labels = [(today - timedelta(days=i)).strftime("%d %b") for i in range(6, -1, -1)]
-            trend_present = [88, 89, 90, 92, 91, 93, attendance_percentage if attendance_percentage > 0 else 94]
-            trend_absent = [100 - p for p in trend_present]
+            trend_present = [0, 0, 0, 0, 0, 0, attendance_percentage if attendance_percentage > 0 else 0]
+            trend_absent = [0 if p == 0 else (100 - p) for p in trend_present]
             
             # Today's Schedule
             todays_schedule = ClassSchedule.objects.filter(day_of_week=today.weekday()).order_by('period__start_time')[:5]
@@ -227,10 +225,7 @@ def dashboard_view(request):
                         attendance_records = AttendanceRecord.objects.filter(student=selected_child)
                         total_marked = attendance_records.count()
                         total_present = attendance_records.filter(status='Present').count()
-                        attendance_percentage = int((total_present / total_marked * 100)) if total_marked > 0 else 92
-                        if total_marked == 0:
-                            total_marked = 180
-                            total_present = 166
+                        attendance_percentage = int((total_present / total_marked * 100)) if total_marked > 0 else 0
                             
                         # 2. Overall Academics
                         exam_results = selected_child.exam_results.all()
@@ -238,8 +233,6 @@ def dashboard_view(request):
                         if exam_results.exists():
                             total_score = sum(res.marks_obtained for res in exam_results)
                             avg_score = int(total_score / exam_results.count())
-                        if avg_score == 0:
-                            avg_score = 78
                             
                         def get_grade(marks):
                             if marks >= 90: return 'A+'
@@ -251,28 +244,19 @@ def dashboard_view(request):
                         results_with_grades = []
                         for res in exam_results:
                             results_with_grades.append({
-                                'exam_name': res.exam.name,
-                                'subject': res.subject.name,
+                                'exam_name': res.exam.title,
+                                'subject': res.exam.subject.name,
                                 'marks': res.marks_obtained,
                                 'grade': get_grade(res.marks_obtained)
                             })
-                        if not results_with_grades:
-                            results_with_grades = [
-                                {'exam_name': 'Unit Test 1', 'subject': 'Mathematics', 'marks': 88, 'grade': 'A'},
-                                {'exam_name': 'Unit Test 1', 'subject': 'Science', 'marks': 76, 'grade': 'B+'},
-                                {'exam_name': 'Mid Term Exam', 'subject': 'English', 'marks': 82, 'grade': 'A'},
-                                {'exam_name': 'Unit Test 1', 'subject': 'Social Studies', 'marks': 71, 'grade': 'B+'},
-                            ]
                             
                         # 3. Pending Fees
                         pending_invoices = selected_child.invoices.filter(is_paid=False)
                         total_pending_fees = sum(inv.amount for inv in pending_invoices)
-                        if total_pending_fees == 0: total_pending_fees = 12000
                         
                         # 4. Upcoming Exams
                         upcoming_exams = Exam.objects.filter(class_assigned=current_class, date__gte=today).order_by('date')[:5]
                         upcoming_exams_count = upcoming_exams.count()
-                        if upcoming_exams_count == 0: upcoming_exams_count = 2
                         
                         # 5. Timetable for today
                         current_day = today.weekday()
@@ -283,13 +267,13 @@ def dashboard_view(request):
                         
                         # Dummy Attendance Trend (last 6 months)
                         trend_labels = ['Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr']
-                        trend_present = [48, 52, 55, 54, 58, 60]
-                        trend_absent = [18, 14, 11, 12, 16, 12]
-                        trend_line = [70, 75, 73, 80, 82, 85]
+                        trend_present = [0, 0, 0, 0, 0, 0]
+                        trend_absent = [0, 0, 0, 0, 0, 0]
+                        trend_line = [0, 0, 0, 0, 0, 0]
                         
                         # Dummy Subject Performance
                         subj_labels = ['Mathematics', 'Science', 'English', 'Social Studies']
-                        subj_scores = [85, 78, 82, 75]
+                        subj_scores = [0, 0, 0, 0]
                         
                         parent_context = {
                             'parent': parent,

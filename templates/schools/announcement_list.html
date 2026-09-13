@@ -1,0 +1,39 @@
+{% extends 'base/base.html' %}
+{% block title %}Announcements | EduCore CRM{% endblock %}
+{% block page_title %}Announcements{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h2>School Announcements</h2>
+        {% if 'admin' in request.user.role.name|lower or 'teacher' in request.user.role.name|lower %}
+        <button class="btn btn-primary" onclick="alert('Feature coming soon!')">
+            <i class="ph ph-plus"></i> New Announcement
+        </button>
+        {% endif %}
+    </div>
+
+    <div class="announcements-list">
+        {% for ann in announcements %}
+        <div style="padding: 16px; border: 1px solid #E5E7EB; border-radius: 8px; margin-bottom: 16px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <h3 style="margin: 0; color: var(--text-main); font-size: 1.1rem;">{{ ann.title }}</h3>
+                <span style="font-size: 0.8rem; color: var(--text-muted);"><i class="ph ph-calendar"></i> {{ ann.created_at|date:"d M Y" }}</span>
+            </div>
+            <div style="display: inline-block; padding: 4px 8px; background: #FEF2F2; color: #EF4444; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-bottom: 12px;">
+                {{ ann.category }}
+            </div>
+            <p style="margin: 0; color: #4B5563; line-height: 1.5;">{{ ann.content|linebreaksbr }}</p>
+            {% if ann.is_active %}
+                <div style="margin-top: 12px; font-size: 0.8rem; color: #10B981;"><i class="ph ph-check-circle"></i> Active</div>
+            {% endif %}
+        </div>
+        {% empty %}
+        <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+            <i class="ph ph-megaphone" style="font-size: 48px; margin-bottom: 16px; color: #D1D5DB;"></i>
+            <p>No announcements found.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

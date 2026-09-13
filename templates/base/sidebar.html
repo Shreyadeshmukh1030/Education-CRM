@@ -48,25 +48,14 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'examinations' %}">
+                    <a href="{% url 'exam_list' %}">
                         <span class="sidebar-icon"><i class="ph ph-pencil-simple"></i></span>
                         <span>Examinations</span>
                     </a>
                 </li>
+
                 <li>
-                    <a href="{% url 'results' %}">
-                        <span class="sidebar-icon"><i class="ph ph-chart-line-up"></i></span>
-                        <span>Results</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'attendance_reports' %}">
-                        <span class="sidebar-icon"><i class="ph ph-file-search"></i></span>
-                        <span>Attendance Reports</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'syllabus' %}">
+                    <a href="{% url 'syllabus_list' %}">
                         <span class="sidebar-icon"><i class="ph ph-book-bookmark"></i></span>
                         <span>Syllabus</span>
                     </a>
@@ -78,41 +67,19 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'fees' %}">
+                    <a href="{% url 'fee_list' %}">
                         <span class="sidebar-icon"><i class="ph ph-graduation-cap"></i></span>
                         <span>Fees (Class View)</span>
                     </a>
                 </li>
-                <li>
-                    <a href="{% url 'messages_app' %}">
-                        <span class="sidebar-icon"><i class="ph ph-chat-circle-dots"></i></span>
-                        <span>Messages</span>
-                    </a>
-                </li>
+
                 <li>
                     <a href="{% url 'school_updates' %}">
                         <span class="sidebar-icon"><i class="ph ph-broadcast"></i></span>
                         <span>School Updates</span>
                     </a>
                 </li>
-                <li>
-                    <a href="{% url 'reminders' %}">
-                        <span class="sidebar-icon"><i class="ph ph-bell"></i></span>
-                        <span>Reminders</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'my_profile' %}">
-                        <span class="sidebar-icon"><i class="ph ph-user"></i></span>
-                        <span>Profile</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'my_settings' %}">
-                        <span class="sidebar-icon"><i class="ph ph-gear"></i></span>
-                        <span>Settings</span>
-                    </a>
-                </li>
+
 
             {% elif request.user.role.name == 'Student' %}
                 <!-- STUDENT SIDEBAR -->
@@ -123,38 +90,49 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="{% url 'student_detail' request.user.student_profile.pk %}">
                         <span class="sidebar-icon"><i class="ph ph-user"></i></span>
                         <span>My Profile</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
-                        <span class="sidebar-icon"><i class="ph ph-books"></i></span>
-                        <span>My Class</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
+                    <a href="{% url 'attendance_select' %}">
                         <span class="sidebar-icon"><i class="ph ph-check-circle"></i></span>
                         <span>Attendance</span>
                     </a>
                 </li>
-                <!-- Academics Dropdown Placeholder -->
                 <li>
-                    <a href="#">
+                    <a href="{% url 'syllabus_list' %}">
                         <span class="sidebar-icon"><i class="ph ph-graduation-cap"></i></span>
-                        <span>Academics</span>
+                        <span>Academics (Syllabus)</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="{% url 'material_list' %}">
+                        <span class="sidebar-icon"><i class="ph ph-book-open"></i></span>
+                        <span>Study Material</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'assignment_list' %}">
+                        <span class="sidebar-icon"><i class="ph ph-clipboard-text"></i></span>
+                        <span>Assignments</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'timetable_view' %}">
                         <span class="sidebar-icon"><i class="ph ph-calendar-blank"></i></span>
                         <span>Timetable</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="{% url 'exam_list' %}">
+                        <span class="sidebar-icon"><i class="ph ph-file-text"></i></span>
+                        <span>Examinations</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'fee_list' %}">
                         <span class="sidebar-icon"><i class="ph ph-currency-inr"></i></span>
                         <span>Fees</span>
                     </a>
@@ -171,30 +149,6 @@
                         <span>School Updates</span>
                     </a>
                 </li>
-                <li>
-                    <a href="#">
-                        <span class="sidebar-icon"><i class="ph ph-calendar-star"></i></span>
-                        <span>Events</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="sidebar-icon"><i class="ph ph-bell"></i></span>
-                        <span>Notifications</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="sidebar-icon"><i class="ph ph-file-pdf"></i></span>
-                        <span>Documents</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="sidebar-icon"><i class="ph ph-calendar"></i></span>
-                        <span>Calendar</span>
-                    </a>
-                </li>
 
             {% elif 'parent' in request.user.role.name|lower %}
                 <!-- PARENT SIDEBAR -->
@@ -204,125 +158,65 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
+
                 <li>
-                    <a href="#">
-                        <span class="sidebar-icon"><i class="ph ph-user"></i></span>
-                        <span>My Children</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
+                    <a href="{% url 'attendance_select' %}">
                         <span class="sidebar-icon"><i class="ph ph-calendar-check"></i></span>
                         <span>Attendance</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="{% url 'syllabus_list' %}">
                         <span class="sidebar-icon"><i class="ph ph-graduation-cap"></i></span>
                         <span>Academics</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="{% url 'assignment_list' %}">
                         <span class="sidebar-icon"><i class="ph ph-clipboard-text"></i></span>
                         <span>Assignments</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="{% url 'material_list' %}">
                         <span class="sidebar-icon"><i class="ph ph-book-open"></i></span>
                         <span>Study Material</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="{% url 'exam_list' %}">
                         <span class="sidebar-icon"><i class="ph ph-file-text"></i></span>
                         <span>Examinations</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
-                        <span class="sidebar-icon"><i class="ph ph-chart-bar"></i></span>
-                        <span>Results</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="sidebar-icon"><i class="ph ph-file-pdf"></i></span>
-                        <span>Report Cards</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
+                    <a href="{% url 'timetable_view' %}">
                         <span class="sidebar-icon"><i class="ph ph-calendar-blank"></i></span>
                         <span>Timetable</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="{% url 'fee_list' %}">
                         <span class="sidebar-icon"><i class="ph ph-currency-inr"></i></span>
                         <span>Fees</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
-                        <span class="sidebar-icon"><i class="ph ph-credit-card"></i></span>
-                        <span>Payments</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="sidebar-icon"><i class="ph ph-bell"></i></span>
-                        <span>Notifications</span>
-                        <span style="margin-left:auto; background:#EF4444; color:#fff; font-size:10px; padding:2px 6px; border-radius:10px; font-weight:700;">3</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
+                    <a href="{% url 'announcements' %}">
                         <span class="sidebar-icon"><i class="ph ph-megaphone"></i></span>
                         <span>Announcements</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
-                        <span class="sidebar-icon"><i class="ph ph-chalkboard-teacher"></i></span>
-                        <span>Teacher Suggestions</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
+                    <a href="{% url 'school_updates' %}">
                         <span class="sidebar-icon"><i class="ph ph-buildings"></i></span>
                         <span>School Updates</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
-                        <span class="sidebar-icon"><i class="ph ph-calendar-star"></i></span>
-                        <span>Events</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="sidebar-icon"><i class="ph ph-folder"></i></span>
-                        <span>Documents</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="sidebar-icon"><i class="ph ph-hand-pointing"></i></span>
-                        <span>Requests</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="sidebar-icon"><i class="ph ph-calendar"></i></span>
-                        <span>Calendar</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
+                    <a href="{% url 'parent_detail' request.user.parent_profile.pk %}">
                         <span class="sidebar-icon"><i class="ph ph-user-circle"></i></span>
-                        <span>Profile</span>
+                        <span>My Profile</span>
                     </a>
                 </li>
                 <div style="margin-top: 24px; padding: 16px; background: rgba(255,255,255,0.05); border-radius: 12px; text-align: center; margin-bottom: 20px;">
@@ -371,13 +265,13 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'examinations' %}">
+                    <a href="{% url 'exam_list' %}">
                         <span class="sidebar-icon"><i class="ph ph-file-text"></i></span>
                         <span>Examinations</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'fees' %}">
+                    <a href="{% url 'fee_list' %}">
                         <span class="sidebar-icon"><i class="ph ph-currency-inr"></i></span>
                         <span>Finance</span>
                     </a>
@@ -394,12 +288,7 @@
                         <span>School Content</span>
                     </a>
                 </li>
-                <li>
-                    <a href="{% url 'my_settings' %}">
-                        <span class="sidebar-icon"><i class="ph ph-gear"></i></span>
-                        <span>Settings</span>
-                    </a>
-                </li>
+
                 <div style="margin-top: 24px; padding: 16px; background: rgba(255,255,255,0.05); border-radius: 12px; text-align: center; margin-bottom: 20px;">
                     <i class="ph ph-buildings" style="font-size: 32px; color: #9CA3AF; margin-bottom: 8px;"></i>
                     <p style="font-size: 0.8rem; color: #D1D5DB; margin: 0; line-height: 1.4;">Building better futures, together.</p>

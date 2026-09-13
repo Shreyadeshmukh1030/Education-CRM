@@ -53,6 +53,7 @@ class SyllabusTopic(models.Model):
         ('In Progress', 'In Progress'),
         ('Completed', 'Completed'),
     )
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='syllabus_topics')
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='topics')
     class_assigned = models.ForeignKey(Class, on_delete=models.CASCADE, related_name='syllabus_topics')
     name = models.CharField(max_length=255)
@@ -63,6 +64,7 @@ class SyllabusTopic(models.Model):
         return f"{self.subject.name} - {self.name}"
 
 class StudyMaterial(models.Model):
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='materials')
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='materials')
@@ -75,6 +77,7 @@ class StudyMaterial(models.Model):
         return self.title
 
 class Assignment(models.Model):
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='assignments')
     title = models.CharField(max_length=255)
     description = models.TextField()
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='assignments')
@@ -88,6 +91,7 @@ class Assignment(models.Model):
         return self.title
 
 class AssignmentSubmission(models.Model):
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='assignment_submissions')
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name='submissions')
     student = models.ForeignKey('students.StudentProfile', on_delete=models.CASCADE, related_name='assignment_submissions')
     file = models.FileField(upload_to='assignment_submissions/')
@@ -106,6 +110,7 @@ class Announcement(models.Model):
         ('Material', 'Material'),
         ('School Notice', 'School Notice'),
     )
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='announcements')
     title = models.CharField(max_length=255)
     content = models.TextField()
     category = models.CharField(max_length=20, choices=TYPE_CHOICES, default='School Notice')
@@ -116,6 +121,7 @@ class Announcement(models.Model):
         return self.title
 
 class Exam(models.Model):
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='exams')
     title = models.CharField(max_length=255)
     class_assigned = models.ForeignKey(Class, on_delete=models.CASCADE, related_name='exams')
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='exams')
@@ -127,6 +133,7 @@ class Exam(models.Model):
         return f"{self.title} - {self.class_assigned.name}"
 
 class ExamResult(models.Model):
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='exam_results')
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE, related_name='results')
     student = models.ForeignKey('students.StudentProfile', on_delete=models.CASCADE, related_name='exam_results')
     marks_obtained = models.DecimalField(max_digits=5, decimal_places=2)

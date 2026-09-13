@@ -1,0 +1,46 @@
+{% extends 'base/base.html' %}
+{% block title %}School Updates | EduCore CRM{% endblock %}
+{% block page_title %}School Updates{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h2>Updates & Events</h2>
+        {% if 'admin' in request.user.role.name|lower or 'teacher' in request.user.role.name|lower %}
+        <button class="btn btn-primary" onclick="alert('Feature coming soon!')">
+            <i class="ph ph-plus"></i> New Update
+        </button>
+        {% endif %}
+    </div>
+
+    <div class="updates-list">
+        {% for update in updates %}
+        <div style="padding: 16px; border: 1px solid #E5E7EB; border-radius: 8px; margin-bottom: 16px; display: flex; gap: 16px; align-items: flex-start;">
+            {% if update.image %}
+                <img src="{{ update.image.url }}" alt="{{ update.title }}" style="width: 120px; height: 120px; object-fit: cover; border-radius: 8px;">
+            {% else %}
+                <div style="width: 120px; height: 120px; background: #F3F4F6; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #9CA3AF;">
+                    <i class="ph ph-image" style="font-size: 32px;"></i>
+                </div>
+            {% endif %}
+            
+            <div style="flex: 1;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <h3 style="margin: 0; color: var(--text-main); font-size: 1.1rem;">{{ update.title }}</h3>
+                    <span style="font-size: 0.8rem; color: var(--text-muted);"><i class="ph ph-calendar"></i> {{ update.date|date:"d M Y" }}</span>
+                </div>
+                <p style="margin: 0; color: #4B5563; line-height: 1.5; margin-bottom: 8px;">{{ update.content|truncatechars:200 }}</p>
+                {% if update.is_published %}
+                    <span style="font-size: 0.75rem; background: #ECFDF5; color: #10B981; padding: 2px 8px; border-radius: 12px;">Published</span>
+                {% endif %}
+            </div>
+        </div>
+        {% empty %}
+        <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+            <i class="ph ph-image" style="font-size: 48px; margin-bottom: 16px; color: #D1D5DB;"></i>
+            <p>No school updates found.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

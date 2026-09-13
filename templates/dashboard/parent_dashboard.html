@@ -107,7 +107,7 @@
         <div class="parent-panel">
             <div class="panel-header">
                 <h3><i class="ph ph-exam"></i> Subject Performance</h3>
-                <a href="#" class="panel-action">View Details <i class="ph ph-arrow-right"></i></a>
+                <a href="{% url 'exam_list' %}" class="panel-action">View Details <i class="ph ph-arrow-right"></i></a>
             </div>
             <div class="chart-container" style="padding: 10px 0;">
                 <canvas id="subjectPerformanceChart"></canvas>
@@ -117,7 +117,7 @@
         <div class="parent-panel">
             <div class="panel-header">
                 <h3><i class="ph ph-bell-ringing"></i> Recent Notifications</h3>
-                <a href="#" class="panel-action">View All <i class="ph ph-arrow-right"></i></a>
+                <a href="{% url 'announcements' %}" class="panel-action">View All <i class="ph ph-arrow-right"></i></a>
             </div>
             <div style="flex:1; overflow-y:auto; max-height: 250px;">
                 <div class="list-item">
@@ -169,7 +169,7 @@
         <div class="parent-panel">
             <div class="panel-header">
                 <h3><i class="ph ph-calendar-blank"></i> Today's Schedule</h3>
-                <a href="#" class="panel-action">View Full Schedule <i class="ph ph-arrow-right"></i></a>
+                <a href="{% url 'timetable_view' %}" class="panel-action">View Full Schedule <i class="ph ph-arrow-right"></i></a>
             </div>
             <table class="parent-table">
                 <thead>
@@ -202,7 +202,7 @@
         <div class="parent-panel">
             <div class="panel-header">
                 <h3><i class="ph ph-file-text"></i> Recent Results</h3>
-                <a href="#" class="panel-action">View All <i class="ph ph-arrow-right"></i></a>
+                <a href="{% url 'exam_list' %}" class="panel-action">View All <i class="ph ph-arrow-right"></i></a>
             </div>
             <table class="parent-table">
                 <thead>
@@ -229,7 +229,7 @@
         <div class="parent-panel">
             <div class="panel-header">
                 <h3><i class="ph ph-wallet"></i> Fee Summary</h3>
-                <a href="#" class="panel-action">View Details <i class="ph ph-arrow-right"></i></a>
+                <a href="{% url 'fee_list' %}" class="panel-action">View Details <i class="ph ph-arrow-right"></i></a>
             </div>
             <div style="display:flex; align-items:center; gap:20px; flex:1;">
                 <div style="width: 120px; height: 120px; position:relative;">
@@ -267,7 +267,7 @@
         <div class="parent-panel">
             <div class="panel-header">
                 <h3><i class="ph ph-clipboard-text"></i> Upcoming Assignments</h3>
-                <a href="#" class="panel-action">View All <i class="ph ph-arrow-right"></i></a>
+                <a href="{% url 'assignment_list' %}" class="panel-action">View All <i class="ph ph-arrow-right"></i></a>
             </div>
             <table class="parent-table">
                 <thead>
@@ -285,7 +285,7 @@
         <div class="parent-panel">
             <div class="panel-header">
                 <h3><i class="ph ph-pencil-line"></i> Upcoming Exams</h3>
-                <a href="#" class="panel-action">View All <i class="ph ph-arrow-right"></i></a>
+                <a href="{% url 'exam_list' %}" class="panel-action">View All <i class="ph ph-arrow-right"></i></a>
             </div>
             <table class="parent-table">
                 <thead>
@@ -305,12 +305,12 @@
                 <h3><i class="ph ph-link"></i> Quick Links</h3>
             </div>
             <div class="quick-links-grid">
-                <div class="link-btn"><div class="icon-bg" style="background:#EFF6FF;color:#3B82F6;"><i class="ph ph-calendar"></i></div> View Timetable</div>
-                <div class="link-btn"><div class="icon-bg" style="background:#F5F3FF;color:#8B5CF6;"><i class="ph ph-book-open"></i></div> Study Material</div>
-                <div class="link-btn"><div class="icon-bg" style="background:#ECFDF5;color:#10B981;"><i class="ph ph-file-text"></i></div> Assignments</div>
-                <div class="link-btn"><div class="icon-bg" style="background:#FEF2F2;color:#EF4444;"><i class="ph ph-chart-bar"></i></div> Results</div>
-                <div class="link-btn"><div class="icon-bg" style="background:#F5F3FF;color:#8B5CF6;"><i class="ph ph-file-pdf"></i></div> Report Card</div>
-                <div class="link-btn"><div class="icon-bg" style="background:#FDF2F8;color:#EC4899;"><i class="ph ph-calendar-plus"></i></div> School Calendar</div>
+                <a href="{% url 'timetable_view' %}" class="link-btn" style="text-decoration:none; color:inherit;"><div class="icon-bg" style="background:#EFF6FF;color:#3B82F6;"><i class="ph ph-calendar"></i></div> View Timetable</a>
+                <a href="{% url 'material_list' %}" class="link-btn" style="text-decoration:none; color:inherit;"><div class="icon-bg" style="background:#F5F3FF;color:#8B5CF6;"><i class="ph ph-book-open"></i></div> Study Material</a>
+                <a href="{% url 'assignment_list' %}" class="link-btn" style="text-decoration:none; color:inherit;"><div class="icon-bg" style="background:#ECFDF5;color:#10B981;"><i class="ph ph-file-text"></i></div> Assignments</a>
+                <a href="{% url 'exam_list' %}" class="link-btn" style="text-decoration:none; color:inherit;"><div class="icon-bg" style="background:#FEF2F2;color:#EF4444;"><i class="ph ph-chart-bar"></i></div> Results</a>
+                <a href="{% url 'exam_list' %}" class="link-btn" style="text-decoration:none; color:inherit;"><div class="icon-bg" style="background:#F5F3FF;color:#8B5CF6;"><i class="ph ph-file-pdf"></i></div> Report Card</a>
+                <a href="{% url 'school_updates' %}" class="link-btn" style="text-decoration:none; color:inherit;"><div class="icon-bg" style="background:#FDF2F8;color:#EC4899;"><i class="ph ph-calendar-plus"></i></div> School Calendar</a>
             </div>
         </div>
 

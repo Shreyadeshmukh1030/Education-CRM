@@ -47,6 +47,9 @@ INSTALLED_APPS = [
     'apps.modules',
     'apps.attendance',
     'apps.timetable',
+    'apps.crm',
+    'apps.finance',
+    'apps.communication',
 ]
 
 MIDDLEWARE = [

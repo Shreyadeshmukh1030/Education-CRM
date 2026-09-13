@@ -2,9 +2,10 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import ParentProfile
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
 from django import forms
-from apps.schools.models import School
+from apps.accounts.mixins import RoleRequiredMixin, SchoolIsolationMixin
 from apps.accounts.mixins import RoleRequiredMixin
 
 class ParentForm(forms.ModelForm):
@@ -35,8 +36,7 @@ class ParentForm(forms.ModelForm):
             
             parent = super().save(commit=False)
             parent.user = user
-            school = School.objects.first()
-            parent.school = school
+            # School assigned in form_valid
         else:
             parent = super().save(commit=False)
             parent.user.first_name = self.cleaned_data['first_name']
@@ -49,37 +49,42 @@ class ParentForm(forms.ModelForm):
             
         return parent
 
-class ParentListView(LoginRequiredMixin, RoleRequiredMixin, ListView):
+class ParentListView(LoginRequiredMixin, RoleRequiredMixin, SchoolIsolationMixin, ListView):
     model = ParentProfile
     template_name = 'parents/parent_list.html'
     context_object_name = 'parents'
-    allowed_roles = ['admin']
+    allowed_roles = ['Admin']
     
     def get_queryset(self):
-        return ParentProfile.objects.select_related('user').all()
+        qs = super().get_queryset()
+        return qs.select_related('user')
 
-class ParentDetailView(LoginRequiredMixin, RoleRequiredMixin, DetailView):
+class ParentDetailView(LoginRequiredMixin, RoleRequiredMixin, SchoolIsolationMixin, DetailView):
     model = ParentProfile
     template_name = 'parents/parent_detail.html'
     context_object_name = 'parent'
-    allowed_roles = ['admin']
+    allowed_roles = ['Admin']
 
 class ParentCreateView(LoginRequiredMixin, RoleRequiredMixin, CreateView):
     model = ParentProfile
     form_class = ParentForm
     template_name = 'parents/parent_form.html'
     success_url = reverse_lazy('parent_list')
-    allowed_roles = ['admin']
+    allowed_roles = ['Admin']
 
-class ParentUpdateView(LoginRequiredMixin, RoleRequiredMixin, UpdateView):
+    def form_valid(self, form):
+        form.instance.school = self.request.user.school
+        return super().form_valid(form)
+
+class ParentUpdateView(LoginRequiredMixin, RoleRequiredMixin, SchoolIsolationMixin, UpdateView):
     model = ParentProfile
     form_class = ParentForm
     template_name = 'parents/parent_form.html'
     success_url = reverse_lazy('parent_list')
-    allowed_roles = ['admin']
+    allowed_roles = ['Admin']
 
-class ParentDeleteView(LoginRequiredMixin, RoleRequiredMixin, DeleteView):
+class ParentDeleteView(LoginRequiredMixin, RoleRequiredMixin, SchoolIsolationMixin, DeleteView):
     model = ParentProfile
     template_name = 'parents/parent_confirm_delete.html'
     success_url = reverse_lazy('parent_list')
-    allowed_roles = ['admin']
+    allowed_roles = ['Admin']

@@ -3,6 +3,44 @@
 {% block page_title %}Mark Attendance: {{ class_obj.name }}{% endblock %}
 
 {% block content %}
+<style>
+.attendance-status-group {
+    display: inline-flex;
+    gap: 8px;
+    background: #F3F4F6;
+    padding: 4px;
+    border-radius: 8px;
+}
+.attendance-status-group input[type="radio"] {
+    display: none;
+}
+.attendance-status-group label {
+    padding: 6px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: all 0.2s;
+    margin: 0;
+}
+.attendance-status-group input[type="radio"]:checked + label {
+    color: white;
+}
+.attendance-status-group input[value="Present"]:checked + label {
+    background: #10B981;
+}
+.attendance-status-group input[value="Absent"]:checked + label {
+    background: #EF4444;
+}
+.attendance-status-group input[value="Late"]:checked + label {
+    background: #F59E0B;
+}
+.attendance-status-group input[value="Excused"]:checked + label {
+    background: #3B82F6;
+}
+</style>
+
 <div class="card">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
         <div>
@@ -22,10 +60,7 @@
                     <tr>
                         <th>Roll No</th>
                         <th>Student Name</th>
-                        <th class="text-center">Present</th>
-                        <th class="text-center">Absent</th>
-                        <th class="text-center">Late</th>
-                        <th class="text-center">Excused</th>
+                        <th class="text-right">Attendance Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,17 +79,20 @@
                                 {{ data.student.user.first_name }} {{ data.student.user.last_name }}
                             </div>
                         </td>
-                        <td class="text-center">
-                            <input type="radio" name="status_{{ data.student.id }}" value="Present" {% if data.status == 'Present' %}checked{% endif %} style="accent-color: #10B981; transform: scale(1.5);">
-                        </td>
-                        <td class="text-center">
-                            <input type="radio" name="status_{{ data.student.id }}" value="Absent" {% if data.status == 'Absent' %}checked{% endif %} style="accent-color: #EF4444; transform: scale(1.5);">
-                        </td>
-                        <td class="text-center">
-                            <input type="radio" name="status_{{ data.student.id }}" value="Late" {% if data.status == 'Late' %}checked{% endif %} style="accent-color: #F59E0B; transform: scale(1.5);">
-                        </td>
-                        <td class="text-center">
-                            <input type="radio" name="status_{{ data.student.id }}" value="Excused" {% if data.status == 'Excused' %}checked{% endif %} style="accent-color: #3B82F6; transform: scale(1.5);">
+                        <td class="text-right">
+                            <div class="attendance-status-group">
+                                <input type="radio" id="present_{{ data.student.id }}" name="status_{{ data.student.id }}" value="Present" {% if data.status == 'Present' %}checked{% endif %}>
+                                <label for="present_{{ data.student.id }}">Present</label>
+
+                                <input type="radio" id="absent_{{ data.student.id }}" name="status_{{ data.student.id }}" value="Absent" {% if data.status == 'Absent' %}checked{% endif %}>
+                                <label for="absent_{{ data.student.id }}">Absent</label>
+
+                                <input type="radio" id="late_{{ data.student.id }}" name="status_{{ data.student.id }}" value="Late" {% if data.status == 'Late' %}checked{% endif %}>
+                                <label for="late_{{ data.student.id }}">Late</label>
+
+                                <input type="radio" id="excused_{{ data.student.id }}" name="status_{{ data.student.id }}" value="Excused" {% if data.status == 'Excused' %}checked{% endif %}>
+                                <label for="excused_{{ data.student.id }}">Excused</label>
+                            </div>
                         </td>
                     </tr>
                     {% empty %}
