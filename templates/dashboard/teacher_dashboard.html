@@ -13,12 +13,20 @@
     <!-- Welcome Header -->
     <div class="dashboard-header">
         <div>
-            <h1>Good Morning, {{ user.first_name }}!</h1>
+            <h1 style="display: flex; align-items: center; gap: 10px;">
+                Good Morning, {{ user.first_name }}!
+                {% if counselor_for_class %}
+                    <span class="badge badge-success" style="font-size: 0.8rem; vertical-align: middle;">Class Counselor ({{ counselor_for_class.name }})</span>
+                {% endif %}
+            </h1>
             <p>Here's what's happening at your school today.</p>
         </div>
-        <div class="dashboard-date">
-            <i class="ph ph-calendar-blank" style="font-size: 20px;"></i>
-            {{ today|date:"D, d M Y" }}
+        <div class="dashboard-date d-flex align-items-center" style="gap: 15px;">
+            <a href="{% url 'teacher_my_classes' %}" class="btn btn-outline-primary btn-sm">My Classes</a>
+            <div>
+                <i class="ph ph-calendar-blank" style="font-size: 20px;"></i>
+                {{ today|date:"D, d M Y" }}
+            </div>
         </div>
     </div>
 

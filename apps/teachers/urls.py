@@ -7,4 +7,8 @@ urlpatterns = [
     path('add/', views.TeacherCreateView.as_view(), name='teacher_add'),
     path('<int:pk>/edit/', views.TeacherUpdateView.as_view(), name='teacher_edit'),
     path('<int:pk>/delete/', views.TeacherDeleteView.as_view(), name='teacher_delete'),
+    
+    # Teacher portal views
+    path('my-classes/', views.TeacherMyClassesView.as_view(), name='teacher_my_classes'),
+    path('class/<int:pk>/', views.TeacherClassDetailView.as_view(), name='teacher_class_detail'),
 ]

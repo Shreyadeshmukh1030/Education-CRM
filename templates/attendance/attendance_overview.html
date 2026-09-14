@@ -1,0 +1,39 @@
+{% extends 'base/base.html' %}
+{% block title %}Attendance Report | EduCore CRM{% endblock %}
+{% block page_title %}Attendance Report: {{ class_obj.name }} ({{ date_str }}){% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>Report for {{ class_obj.name }}</h2>
+        <a href="{% url 'attendance_select' %}" class="btn btn-secondary">Back</a>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Name</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in student_data %}
+            <tr>
+                <td>{{ item.student.student_id }}</td>
+                <td>{{ item.student.user.first_name }} {{ item.student.user.last_name }}</td>
+                <td>
+                    <span class="badge {% if item.status == 'Present' %}badge-success{% elif item.status == 'Absent' %}badge-danger{% elif item.status == 'Late' %}badge-warning{% else %}badge-secondary{% endif %}">
+                        {{ item.status }}
+                    </span>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" style="text-align: center;">No students in this class.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

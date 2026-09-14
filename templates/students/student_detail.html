@@ -18,31 +18,122 @@
     </div>
 </div>
 
-<div class="card animate-fade-in stagger-2" style="max-width: 800px; margin: 0 auto; padding: 30px;">
-    <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color);">
-        <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(79, 70, 229, 0.1); color: var(--primary-color); display: flex; justify-content: center; align-items: center; font-weight: 600; font-size: 2rem;">
-            {{ student.user.first_name|first }}{{ student.user.last_name|first }}
-        </div>
-        <div>
-            <h2 style="font-size: 1.8rem; margin-bottom: 5px;">{{ student.user.first_name }} {{ student.user.last_name }}</h2>
-            <p style="color: var(--text-muted); font-size: 1.1rem;">ID: {{ student.student_id }} | Class: {{ student.current_class.name|default:"Not Assigned" }}</p>
-        </div>
-    </div>
-    
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-        <div>
-            <h3 style="font-size: 1.1rem; margin-bottom: 15px; color: var(--text-color); border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">Personal Information</h3>
-            <p><strong>Email:</strong> {{ student.user.email }}</p>
-            <p><strong>Date of Birth:</strong> {{ student.date_of_birth|default:"-" }}</p>
-            <p><strong>Gender:</strong> {{ student.gender|default:"-" }}</p>
-            <p><strong>Blood Group:</strong> {{ student.blood_group|default:"-" }}</p>
-        </div>
-        <div>
-            <h3 style="font-size: 1.1rem; margin-bottom: 15px; color: var(--text-color); border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">Contact Information</h3>
-            <p><strong>Address:</strong> {{ student.address|default:"-" }}</p>
-            <p><strong>Emergency Contact:</strong> {{ student.emergency_contact|default:"-" }}</p>
-            <p><strong>Admission Date:</strong> {{ student.admission_date|default:"-" }}</p>
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <ul class="nav nav-tabs" id="studentTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="biodata-tab" data-toggle="tab" href="#biodata" role="tab">Biodata</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="attendance-tab" data-toggle="tab" href="#attendance" role="tab">Attendance</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="academics-tab" data-toggle="tab" href="#academics" role="tab">Academics</a>
+            </li>
+        </ul>
+        <div class="tab-content mt-4" id="studentTabContent">
+            <!-- Biodata Tab -->
+            <div class="tab-pane fade show active" id="biodata" role="tabpanel">
+                <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color);">
+                    <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(79, 70, 229, 0.1); color: var(--primary-color); display: flex; justify-content: center; align-items: center; font-weight: 600; font-size: 2rem;">
+                        {{ student.user.first_name|first }}{{ student.user.last_name|first }}
+                    </div>
+                    <div>
+                        <h2 style="font-size: 1.8rem; margin-bottom: 5px;">{{ student.user.first_name }} {{ student.user.last_name }}</h2>
+                        <p style="color: var(--text-muted); font-size: 1.1rem;">ID: {{ student.student_id }} | Class: {{ student.current_class.name|default:"Not Assigned" }}</p>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3 style="font-size: 1.1rem; margin-bottom: 15px; color: var(--text-color); border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">Personal Information</h3>
+                        <p><strong>Email:</strong> {{ student.user.email }}</p>
+                        <p><strong>Date of Birth:</strong> {{ student.date_of_birth|default:"-" }}</p>
+                        <p><strong>Gender:</strong> {{ student.gender|default:"-" }}</p>
+                        <p><strong>Blood Group:</strong> {{ student.blood_group|default:"-" }}</p>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.1rem; margin-bottom: 15px; color: var(--text-color); border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">Contact Information</h3>
+                        <p><strong>Address:</strong> {{ student.address|default:"-" }}</p>
+                        <p><strong>Emergency Contact:</strong> {{ student.emergency_contact|default:"-" }}</p>
+                        <p><strong>Admission Date:</strong> {{ student.admission_date|default:"-" }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Attendance Tab -->
+            <div class="tab-pane fade" id="attendance" role="tabpanel">
+                <h4>Attendance Overview</h4>
+                <div class="mb-4">
+                    <strong>Overall Attendance:</strong> {{ attendance_percentage|floatformat:1 }}%
+                </div>
+                <h5>Recent Records</h5>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in recent_attendance %}
+                        <tr>
+                            <td>{{ record.date }}</td>
+                            <td>
+                                <span class="badge {% if record.status == 'Present' %}badge-success{% elif record.status == 'Absent' %}badge-danger{% else %}badge-warning{% endif %}">
+                                    {{ record.status }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="2" class="text-center">No attendance records found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Academics Tab -->
+            <div class="tab-pane fade" id="academics" role="tabpanel">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4>Academic Performance</h4>
+                    <a href="{% url 'student_marksheet' student.pk %}" class="btn btn-success">
+                        <i class="ph ph-download-simple" style="margin-right: 8px;"></i> Download Marksheet
+                    </a>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Exam</th>
+                            <th>Date</th>
+                            <th>Subject</th>
+                            <th>Max Marks</th>
+                            <th>Marks Obtained</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for res in exam_results %}
+                        <tr>
+                            <td>{{ res.exam.title }}</td>
+                            <td>{{ res.exam.date }}</td>
+                            <td>{{ res.exam.subject.name|default:"General" }}</td>
+                            <td>{{ res.exam.max_marks }}</td>
+                            <td>{{ res.marks_obtained }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">No exam results found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
+
+<!-- Required scripts for bootstrap tabs if not already included in base.html -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
 {% endblock %}

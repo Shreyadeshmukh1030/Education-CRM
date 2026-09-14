@@ -229,6 +229,14 @@ class StudyMaterialDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('material_list')
 
 # --- EXAMS ---
+class ExamForm(forms.ModelForm):
+    class Meta:
+        model = Exam
+        fields = ['title', 'class_assigned', 'subject', 'date', 'max_marks']
+        widgets = {
+            'date': forms.DateInput(attrs={'type': 'date'}),
+        }
+
 class ExamListView(LoginRequiredMixin, ListView):
     model = Exam
     template_name = 'academics/exam_list.html'
@@ -237,8 +245,8 @@ class ExamListView(LoginRequiredMixin, ListView):
 
 class ExamCreateView(LoginRequiredMixin, CreateView):
     model = Exam
+    form_class = ExamForm
     template_name = 'academics/exam_form.html'
-    fields = ['title', 'class_assigned', 'subject', 'date', 'max_marks']
     success_url = reverse_lazy('exam_list')
 
     def form_valid(self, form):
@@ -247,8 +255,8 @@ class ExamCreateView(LoginRequiredMixin, CreateView):
 
 class ExamUpdateView(LoginRequiredMixin, UpdateView):
     model = Exam
+    form_class = ExamForm
     template_name = 'academics/exam_form.html'
-    fields = ['title', 'class_assigned', 'subject', 'date', 'max_marks']
     success_url = reverse_lazy('exam_list')
 
 class ExamDeleteView(LoginRequiredMixin, DeleteView):

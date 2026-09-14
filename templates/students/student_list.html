@@ -8,9 +8,23 @@
         <h1 style="font-size: 2rem; margin-bottom: 5px;">Students</h1>
         <p style="color: var(--text-muted);">Manage all student enrollments and profiles.</p>
     </div>
-    <a href="{% url 'student_add' %}" class="btn btn-primary">
-        <i class="ph ph-plus-circle" style="margin-right: 8px; font-size: 1.2rem;"></i> Add Student
-    </a>
+    
+    <div style="display: flex; gap: 15px; align-items: center;">
+        <form method="GET" style="display: flex; gap: 10px;">
+            <input type="text" name="search" class="form-control" placeholder="Search by name or ID..." value="{{ request.GET.search }}">
+            <select name="class" class="form-control">
+                <option value="">All Classes</option>
+                {% for c in classes %}
+                <option value="{{ c.id }}" {% if request.GET.class == c.id|stringformat:"s" %}selected{% endif %}>{{ c.name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-secondary">Filter</button>
+        </form>
+        
+        <a href="{% url 'student_add' %}" class="btn btn-primary">
+            <i class="ph ph-plus-circle" style="margin-right: 8px; font-size: 1.2rem;"></i> Add Student
+        </a>
+    </div>
 </div>
 
 <div class="card animate-fade-in stagger-2" style="padding: 0; overflow: hidden;">

@@ -116,53 +116,26 @@
         <div class="admin-panel">
             <div class="panel-header">
                 <h3><i class="ph ph-megaphone"></i> Recent Announcements</h3>
-                <a href="#" class="panel-action">This Month <i class="ph ph-caret-down"></i></a>
+                <a href="{% url 'announcements' %}" class="panel-action">This Month <i class="ph ph-caret-down"></i></a>
             </div>
             <div style="flex:1; overflow-y:auto; max-height: 250px;">
+                {% for ann in recent_announcements %}
                 <div class="list-item">
-                    <div class="list-icon" style="background: #F5F3FF; color: #8B5CF6;"><i class="ph ph-users"></i></div>
+                    <div class="list-icon" style="background: #{% cycle 'F5F3FF' 'FEF2F2' 'FEF3C7' 'EFF6FF' %}; color: #{% cycle '8B5CF6' 'EF4444' 'F59E0B' '3B82F6' %};"><i class="ph ph-bell"></i></div>
                     <div class="list-content">
                         <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                            <h4>Parent-Teacher Meeting</h4>
-                            <span class="alert-badge blue" style="background:#EFF6FF; color:#3B82F6;">General</span>
+                            <h4>{{ ann.title }}</h4>
+                            <span class="alert-badge" style="background:#EFF6FF; color:#3B82F6;">{{ ann.category }}</span>
                         </div>
-                        <p>PTM will be held on 26th April 2025.</p>
-                        <div class="list-date">22 Apr 2025</div>
+                        <p>{{ ann.content|truncatechars:50 }}</p>
+                        <div class="list-date">{{ ann.created_at|date:"d M Y" }}</div>
                     </div>
                 </div>
-                <div class="list-item">
-                    <div class="list-icon" style="background: #FEF2F2; color: #EF4444;"><i class="ph ph-calendar-star"></i></div>
-                    <div class="list-content">
-                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                            <h4>Annual Day Celebration</h4>
-                            <span class="alert-badge" style="background:#ECFDF5; color:#10B981;">Event</span>
-                        </div>
-                        <p>Annual Day will be on 15th May 2025.</p>
-                        <div class="list-date">20 Apr 2025</div>
-                    </div>
+                {% empty %}
+                <div style="padding: 15px; text-align: center; color: var(--text-muted);">
+                    No recent announcements.
                 </div>
-                <div class="list-item">
-                    <div class="list-icon" style="background: #FEF3C7; color: #F59E0B;"><i class="ph ph-book-open"></i></div>
-                    <div class="list-content">
-                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                            <h4>New Study Material Added</h4>
-                            <span class="alert-badge" style="background:#F5F3FF; color:#8B5CF6;">Material</span>
-                        </div>
-                        <p>Chapter 5 - Fractions (Maths) is now available.</p>
-                        <div class="list-date">18 Apr 2025</div>
-                    </div>
-                </div>
-                <div class="list-item">
-                    <div class="list-icon" style="background: #EFF6FF; color: #3B82F6;"><i class="ph ph-bell"></i></div>
-                    <div class="list-content">
-                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                            <h4>School Holiday</h4>
-                            <span class="alert-badge" style="background:#FEF2F2; color:#EF4444;">Notice</span>
-                        </div>
-                        <p>School will remain closed on 25th April 2025.</p>
-                        <div class="list-date">16 Apr 2025</div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -172,7 +145,7 @@
         <div class="admin-panel">
             <div class="panel-header">
                 <h3><i class="ph ph-calendar-blank"></i> Today's Schedule</h3>
-                <a href="#" class="panel-action">View Full Schedule <i class="ph ph-arrow-right"></i></a>
+                <a href="{% url 'timetable_view' %}" class="panel-action">View Full Schedule <i class="ph ph-arrow-right"></i></a>
             </div>
             <table class="admin-table">
                 <thead>
@@ -242,15 +215,15 @@
                 <h3><i class="ph ph-lightning"></i> Quick Actions</h3>
             </div>
             <div class="quick-actions-grid">
-                <button class="action-btn"><i class="ph ph-user" style="color: #3B82F6;"></i> Add Student</button>
-                <button class="action-btn"><i class="ph ph-users" style="color: #10B981;"></i> Add Teacher</button>
-                <button class="action-btn"><i class="ph ph-user-plus" style="color: #EC4899;"></i> Add Parent</button>
-                <button class="action-btn"><i class="ph ph-file-text" style="color: #8B5CF6;"></i> Create Exam</button>
-                <button class="action-btn"><i class="ph ph-megaphone" style="color: #F59E0B;"></i> Announcement</button>
-                <button class="action-btn"><i class="ph ph-calendar-plus" style="color: #14B8A6;"></i> Add Event</button>
-                <button class="action-btn"><i class="ph ph-chart-bar" style="color: #3B82F6;"></i> Generate Report</button>
-                <button class="action-btn"><i class="ph ph-currency-inr" style="color: #EF4444;"></i> Manage Fees</button>
-                <button class="action-btn"><i class="ph ph-calendar-blank" style="color: #8B5CF6;"></i> View Calendar</button>
+                <a href="{% url 'student_add' %}" class="action-btn" style="text-decoration:none; display:flex; flex-direction:column; align-items:center; justify-content:center; color:inherit;"><i class="ph ph-user" style="color: #3B82F6; font-size:24px; margin-bottom:5px;"></i> Add Student</a>
+                <a href="{% url 'teacher_add' %}" class="action-btn" style="text-decoration:none; display:flex; flex-direction:column; align-items:center; justify-content:center; color:inherit;"><i class="ph ph-users" style="color: #10B981; font-size:24px; margin-bottom:5px;"></i> Add Teacher</a>
+                <a href="{% url 'parent_add' %}" class="action-btn" style="text-decoration:none; display:flex; flex-direction:column; align-items:center; justify-content:center; color:inherit;"><i class="ph ph-user-plus" style="color: #EC4899; font-size:24px; margin-bottom:5px;"></i> Add Parent</a>
+                <a href="{% url 'exam_add' %}" class="action-btn" style="text-decoration:none; display:flex; flex-direction:column; align-items:center; justify-content:center; color:inherit;"><i class="ph ph-file-text" style="color: #8B5CF6; font-size:24px; margin-bottom:5px;"></i> Create Exam</a>
+                <a href="{% url 'announcements' %}" class="action-btn" style="text-decoration:none; display:flex; flex-direction:column; align-items:center; justify-content:center; color:inherit;"><i class="ph ph-megaphone" style="color: #F59E0B; font-size:24px; margin-bottom:5px;"></i> Announcement</a>
+                <a href="{% url 'school_updates' %}" class="action-btn" style="text-decoration:none; display:flex; flex-direction:column; align-items:center; justify-content:center; color:inherit;"><i class="ph ph-calendar-plus" style="color: #14B8A6; font-size:24px; margin-bottom:5px;"></i> Add Event</a>
+                <a href="{% url 'attendance_select' %}" class="action-btn" style="text-decoration:none; display:flex; flex-direction:column; align-items:center; justify-content:center; color:inherit;"><i class="ph ph-chart-bar" style="color: #3B82F6; font-size:24px; margin-bottom:5px;"></i> Generate Report</a>
+                <a href="{% url 'fee_list' %}" class="action-btn" style="text-decoration:none; display:flex; flex-direction:column; align-items:center; justify-content:center; color:inherit;"><i class="ph ph-currency-inr" style="color: #EF4444; font-size:24px; margin-bottom:5px;"></i> Manage Fees</a>
+                <a href="{% url 'timetable_view' %}" class="action-btn" style="text-decoration:none; display:flex; flex-direction:column; align-items:center; justify-content:center; color:inherit;"><i class="ph ph-calendar-blank" style="color: #8B5CF6; font-size:24px; margin-bottom:5px;"></i> View Calendar</a>
             </div>
         </div>
     </div>

@@ -57,18 +57,56 @@ class StudentListView(LoginRequiredMixin, RoleRequiredMixin, SchoolIsolationMixi
         qs = super().get_queryset()
         user = self.request.user
         if 'Admin' in user.role.name:
-            return qs.select_related('user', 'current_class')
+            qs = qs.select_related('user', 'current_class')
         elif 'Teacher' in user.role.name:
             teacher = getattr(user, 'teacher_profile', None)
             if teacher:
-                return qs.filter(current_class__in=teacher.classes.all()).select_related('user', 'current_class')
-        return qs.none()
+                qs = qs.filter(current_class__in=teacher.classes.all()).select_related('user', 'current_class')
+            else:
+                qs = qs.none()
+        else:
+            qs = qs.none()
+
+        # Apply search and filter
+        search_query = self.request.GET.get('search', '')
+        class_filter = self.request.GET.get('class', '')
+
+        if search_query:
+            qs = qs.filter(user__first_name__icontains=search_query) | qs.filter(user__last_name__icontains=search_query) | qs.filter(student_id__icontains=search_query)
+        if class_filter:
+            qs = qs.filter(current_class_id=class_filter)
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from apps.academics.models import Class
+        context['classes'] = Class.objects.all()
+        return context
 
 class StudentDetailView(LoginRequiredMixin, RoleRequiredMixin, SchoolIsolationMixin, DetailView):
     model = StudentProfile
     template_name = 'students/student_detail.html'
     context_object_name = 'student'
     allowed_roles = ['Admin', 'Teacher']
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from apps.attendance.models import AttendanceRecord
+        from apps.academics.models import ExamResult
+        
+        # Get recent attendance
+        context['recent_attendance'] = AttendanceRecord.objects.filter(student=self.object).order_by('-date')[:10]
+        
+        # Calculate attendance percentage
+        total_days = AttendanceRecord.objects.filter(student=self.object).count()
+        present_days = AttendanceRecord.objects.filter(student=self.object, status='Present').count()
+        context['attendance_percentage'] = (present_days / total_days * 100) if total_days > 0 else 0
+        
+        # Get exam results
+        context['exam_results'] = ExamResult.objects.filter(student=self.object).select_related('exam', 'exam__subject').order_by('-exam__date')
+        
+        return context
 
 class StudentCreateView(LoginRequiredMixin, RoleRequiredMixin, CreateView):
     model = StudentProfile

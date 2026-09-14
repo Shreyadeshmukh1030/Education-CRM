@@ -18,7 +18,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'class_list' %}">
+                    <a href="{% url 'teacher_my_classes' %}" class="{% if '/teacher/my-classes/' in request.path %}active{% endif %}">
                         <span class="sidebar-icon"><i class="ph ph-book-open"></i></span>
                         <span>My Classes</span>
                     </a>

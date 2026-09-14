@@ -89,3 +89,40 @@ class TeacherDeleteView(LoginRequiredMixin, RoleRequiredMixin, SchoolIsolationMi
     template_name = 'teachers/teacher_confirm_delete.html'
     success_url = reverse_lazy('teacher_list')
     allowed_roles = ['Admin']
+
+class TeacherMyClassesView(LoginRequiredMixin, RoleRequiredMixin, ListView):
+    template_name = 'teachers/my_classes.html'
+    context_object_name = 'classes'
+    allowed_roles = ['Teacher']
+    
+    def get_queryset(self):
+        teacher = self.request.user.teacher_profile
+        return teacher.classes.all()
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        teacher = self.request.user.teacher_profile
+        context['counselor_for_class'] = getattr(teacher, 'counselor_for_class', None)
+        return context
+
+from apps.academics.models import Class
+from apps.students.models import StudentProfile
+
+class TeacherClassDetailView(LoginRequiredMixin, RoleRequiredMixin, DetailView):
+    model = Class
+    template_name = 'teachers/class_detail.html'
+    context_object_name = 'class_obj'
+    allowed_roles = ['Teacher']
+    
+    def get_queryset(self):
+        # Ensure the teacher is assigned to this class
+        teacher = self.request.user.teacher_profile
+        return teacher.classes.all()
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Get students in this class
+        context['students'] = StudentProfile.objects.filter(current_class=self.object)
+        teacher = self.request.user.teacher_profile
+        context['is_counselor'] = getattr(teacher, 'counselor_for_class', None) == self.object
+        return context

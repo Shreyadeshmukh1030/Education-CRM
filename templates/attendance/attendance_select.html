@@ -22,11 +22,36 @@
             <input type="date" id="date_select" class="form-control" value="{{ today }}">
         </div>
         
-        <button id="proceed_btn" class="btn btn-primary" style="width: 100%;">Proceed</button>
+        {% if is_admin %}
+            <button id="proceed_btn" class="btn btn-primary" style="width: 100%;">View Report</button>
+            <p style="color: red; text-align: center; margin-top: 10px;">Admins can only view reports.</p>
+        {% else %}
+            <button id="proceed_btn" class="btn btn-primary" style="width: 100%;">Proceed</button>
+            <p id="counselor_msg" style="color: red; text-align: center; margin-top: 10px; display: none;">You are not the counselor for this class. You can only view reports.</p>
+        {% endif %}
     </div>
 </div>
 
 <script>
+    const is_admin = {{ is_admin|yesno:"true,false" }};
+    const counselor_classes = {{ counselor_classes|default:"[]"|safe }};
+    
+    document.getElementById('class_select').addEventListener('change', function() {
+        if (is_admin) return;
+        
+        const classId = parseInt(this.value);
+        const btn = document.getElementById('proceed_btn');
+        const msg = document.getElementById('counselor_msg');
+        
+        if (classId && !counselor_classes.includes(classId)) {
+            btn.textContent = "View Report";
+            msg.style.display = "block";
+        } else {
+            btn.textContent = "Proceed";
+            msg.style.display = "none";
+        }
+    });
+
     document.getElementById('proceed_btn').addEventListener('click', function() {
         const classId = document.getElementById('class_select').value;
         const dateStr = document.getElementById('date_select').value;
@@ -36,8 +61,14 @@
             return;
         }
         
-        // Redirect to the mark view
-        window.location.href = `/attendance/mark/${classId}/${dateStr}/`;
+        // Even for "View Report" we send them to the mark view, but the view will handle it if they aren't counselor.
+        // Wait, the mark view currently redirects them away. We need an overview page.
+        // We will create /attendance/overview/<class_id>/<date_str>/ soon. 
+        if (is_admin || (classId && !counselor_classes.includes(parseInt(classId)))) {
+            window.location.href = `/attendance/overview/${classId}/${dateStr}/`;
+        } else {
+            window.location.href = `/attendance/mark/${classId}/${dateStr}/`;
+        }
     });
 </script>
 {% endblock %}

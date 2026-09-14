@@ -12,6 +12,7 @@ class TeacherProfile(models.Model):
     
     # We will add ManyToMany for subjects and classes later when Subject model is created
     classes = models.ManyToManyField('academics.Class', related_name='assigned_teachers', blank=True)
+    counselor_for_class = models.OneToOneField('academics.Class', null=True, blank=True, on_delete=models.SET_NULL, related_name='counselor')
     subjects = models.ManyToManyField('academics.Subject', related_name='assigned_teachers', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

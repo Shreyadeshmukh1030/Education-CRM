@@ -1,0 +1,39 @@
+{% extends 'base/base.html' %}
+{% block title %}My Classes | EduCore CRM{% endblock %}
+{% block page_title %}My Classes{% endblock %}
+
+{% block content %}
+<div class="row">
+    {% for class_obj in classes %}
+    <div class="col-md-4">
+        <div class="card mb-4 shadow-sm" style="border-radius: 12px; overflow: hidden; border: 1px solid #e3e6f0;">
+            <div class="card-body text-center" style="padding: 30px;">
+                <h3 style="color: #4e73df; font-weight: 700; margin-bottom: 10px;">{{ class_obj.name }}</h3>
+                {% if counselor_for_class == class_obj %}
+                    <span class="badge badge-success mb-3">Class Counselor</span>
+                {% else %}
+                    <span class="badge badge-secondary mb-3">Subject Teacher</span>
+                {% endif %}
+                
+                <p class="text-muted" style="margin-bottom: 20px;">
+                    View students, reports, and attendance for this class.
+                </p>
+                <div class="d-flex justify-content-center" style="gap: 10px;">
+                    <a href="{% url 'teacher_class_detail' class_obj.id %}" class="btn btn-outline-primary" style="flex: 1;">View Details</a>
+                    
+                    {% if counselor_for_class == class_obj %}
+                        <a href="{% url 'attendance_select' %}" class="btn btn-primary" style="flex: 1;">Attendance</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">
+            You have not been assigned to any classes yet.
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

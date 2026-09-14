@@ -66,15 +66,50 @@ def dashboard_view(request):
             current_month = today.month
             new_admissions = StudentProfile.objects.filter(admission_date__month=current_month).count()
                 
-            # Dummy Growth Data for Chart (Keep for now, but empty it)
-            growth_labels = ['Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr']
-            growth_students = [0, 0, 0, 0, 0, 0]
-            growth_admissions = [0, 0, 0, 0, 0, 0]
+            # Dynamic Growth Data for Chart
+            import calendar
+            from dateutil.relativedelta import relativedelta
             
-            # Dummy Attendance Trend for Chart (Keep for now, but empty it)
-            trend_labels = [(today - timedelta(days=i)).strftime("%d %b") for i in range(6, -1, -1)]
-            trend_present = [0, 0, 0, 0, 0, 0, attendance_percentage if attendance_percentage > 0 else 0]
-            trend_absent = [0 if p == 0 else (100 - p) for p in trend_present]
+            growth_labels = []
+            growth_students = []
+            growth_admissions = []
+            
+            for i in range(5, -1, -1):
+                month_date = today - relativedelta(months=i)
+                growth_labels.append(month_date.strftime('%b'))
+                
+                # Students admitted in that month
+                month_admissions = StudentProfile.objects.filter(
+                    admission_date__year=month_date.year,
+                    admission_date__month=month_date.month
+                ).count()
+                growth_admissions.append(month_admissions)
+                
+                # Total students up to that month
+                total_up_to_month = StudentProfile.objects.filter(
+                    admission_date__lt=month_date.replace(day=calendar.monthrange(month_date.year, month_date.month)[1]) + timedelta(days=1)
+                ).count()
+                growth_students.append(total_up_to_month)
+            
+            # Dynamic Attendance Trend for Chart (Last 7 days)
+            trend_labels = []
+            trend_present = []
+            trend_absent = []
+            
+            for i in range(6, -1, -1):
+                d = today - timedelta(days=i)
+                trend_labels.append(d.strftime("%d %b"))
+                
+                daily_att = AttendanceRecord.objects.filter(date=d)
+                d_marked = daily_att.count()
+                if d_marked > 0:
+                    d_present_count = daily_att.filter(status='Present').count()
+                    d_perc = int((d_present_count / d_marked) * 100)
+                    trend_present.append(d_perc)
+                    trend_absent.append(100 - d_perc)
+                else:
+                    trend_present.append(0)
+                    trend_absent.append(0)
             
             # Today's Schedule
             todays_schedule = ClassSchedule.objects.filter(day_of_week=today.weekday()).order_by('period__start_time')[:5]
@@ -84,6 +119,9 @@ def dashboard_view(request):
             
             # School Updates
             school_updates = SchoolUpdate.objects.order_by('-date')[:3]
+            
+            # Recent Announcements
+            recent_announcements = Announcement.objects.order_by('-created_at')[:4]
             
             admin_context = {
                 'total_students': total_students,
@@ -106,6 +144,7 @@ def dashboard_view(request):
                 'todays_schedule': todays_schedule,
                 'recent_results': recent_results,
                 'school_updates': school_updates,
+                'recent_announcements': recent_announcements,
                 'today': today
             }
             return render(request, 'dashboard/admin_dashboard.html', admin_context)
@@ -178,6 +217,7 @@ def dashboard_view(request):
 
                     teacher_context = {
                         'teacher': teacher,
+                        'counselor_for_class': getattr(teacher, 'counselor_for_class', None),
                         'total_classes_assigned': total_classes_assigned,
                         'total_assigned_students': total_assigned_students,
                         'pending_assignments': pending_assignments,
